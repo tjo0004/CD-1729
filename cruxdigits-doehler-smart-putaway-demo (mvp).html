@@ -1,0 +1,3937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1.0">
+<title>Smart Putaway · Doehler Holland BV</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+:root {
+  --doehler-green: #6BA539;
+  --doehler-green-dark: #4D7E1F;
+  --doehler-green-darker: #2F4E12;
+  --doehler-green-tint: #EEF5E3;
+  --doehler-green-tint-2: #DCE9C7;
+
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-2: #F4F3EE;
+  --surface-3: #ECEAE2;
+
+  --text: #1A1B1A;
+  --text-2: #5C5E58;
+  --text-3: #8B8D86;
+  --text-inv: #FFFFFF;
+
+  --border: #E5E3DC;
+  --border-2: #CECBC0;
+  --border-strong: #1A1B1A;
+
+  --amber: #B8860B;
+  --amber-tint: #FBF1D8;
+  --red: #A02C2C;
+  --red-tint: #F8E5E1;
+  --blue: #2C5282;
+  --blue-tint: #E1ECF5;
+
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --tap-bg: rgba(107, 165, 57, 0.08);
+
+  --radius: 4px;
+  --radius-lg: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: var(--font-sans); color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; font-size: 14px; line-height: 1.5; font-weight: 400; }
+
+.mono { font-family: var(--font-mono); font-feature-settings: 'tnum' on, 'lnum' on; }
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* ====== HEADER ====== */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-logo .mark {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.brand-logo .mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--doehler-green);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.brand-logo .mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  clip-path: polygon(50% 50%, 100% 50%, 50% 100%);
+}
+.brand-logo .name {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.brand-client {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.brand-client .tenant-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--doehler-green);
+  box-shadow: 0 0 0 3px var(--doehler-green-tint);
+}
+.brand-client strong {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.brand-client .tenant-sub {
+  color: var(--text-3);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  margin-left: 6px;
+}
+
+.vendor-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  font-size: 10px;
+  color: var(--text-3);
+  z-index: 50;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  opacity: 0.65;
+}
+.vendor-credit .mini-mark {
+  position: relative;
+  width: 8px;
+  height: 8px;
+}
+.vendor-credit .mini-mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--doehler-green);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.vendor-credit .mini-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  clip-path: polygon(50% 50%, 100% 50%, 50% 100%);
+}
+body.logged-out .vendor-credit { display: none; }
+.brand-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+}
+.brand-client {
+  font-size: 13px;
+  color: var(--text-2);
+}
+.brand-client strong { color: var(--text); font-weight: 500; }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.nl-search {
+  position: relative;
+  width: 380px;
+}
+.nl-search input {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text);
+  transition: all 0.15s;
+}
+.nl-search input:focus {
+  outline: none;
+  background: var(--surface);
+  border-color: var(--doehler-green);
+}
+.nl-search .ti {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-3);
+  font-size: 16px;
+}
+.nl-search .kbd {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  background: var(--surface);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.user-chip .avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--doehler-green-tint);
+  color: var(--doehler-green-darker);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+/* ====== NAV TABS ====== */
+nav.tabs {
+  display: flex;
+  padding: 0 28px;
+  gap: 4px;
+}
+nav.tabs button {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.15s;
+}
+nav.tabs button .ti { font-size: 16px; }
+nav.tabs button:hover { color: var(--text); }
+nav.tabs button.active {
+  color: var(--text);
+  border-bottom-color: var(--doehler-green);
+}
+nav.tabs button .badge {
+  background: var(--red);
+  color: white;
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* ====== MAIN LAYOUT ====== */
+main {
+  padding: 24px 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.view { display: none; animation: fadeIn 0.25s ease; }
+.view.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.section-header h1 {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.section-header .sub {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-top: 6px;
+}
+.section-header .meta {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}
+
+/* ====== KPI ROW ====== */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  position: relative;
+}
+.kpi-label {
+  font-size: 11px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-family: var(--font-mono);
+}
+.kpi-unit {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-left: 2px;
+}
+.kpi-delta {
+  font-size: 11px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.kpi-delta.up { color: var(--doehler-green-dark); }
+.kpi-delta.down { color: var(--red); }
+.kpi-delta.neutral { color: var(--text-3); }
+
+/* ====== DASHBOARD COLUMNS ====== */
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.card-head h3 {
+  font-size: 14px;
+  font-weight: 500;
+}
+.card-head .count {
+  font-size: 11px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  background: var(--surface-2);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.card-body { padding: 0; }
+
+/* trucks */
+.truck-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 100px 90px 110px;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  font-size: 13px;
+  transition: background 0.12s;
+}
+.truck-row:last-child { border-bottom: none; }
+.truck-row:hover { background: var(--surface-2); }
+.truck-row .ident {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 13px;
+}
+.truck-row .cargo {
+  color: var(--text-2);
+  font-size: 12px;
+}
+.truck-row .drums {
+  font-family: var(--font-mono);
+  color: var(--text);
+  font-size: 12px;
+}
+.truck-row .eta {
+  font-family: var(--font-mono);
+  color: var(--text-3);
+  font-size: 12px;
+}
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.status-dot.live { background: var(--doehler-green); box-shadow: 0 0 0 3px var(--doehler-green-tint); animation: pulse 1.8s infinite; }
+.status-dot.queued { background: var(--text-3); }
+.status-dot.scheduled { background: var(--blue); }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.btn {
+  background: var(--text);
+  color: var(--text-inv);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+.btn:hover { background: var(--doehler-green-darker); }
+.btn.primary { background: var(--doehler-green); }
+.btn.primary:hover { background: var(--doehler-green-dark); }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border-2); }
+.btn.ghost:hover { background: var(--surface-2); }
+.btn .ti { font-size: 14px; }
+
+/* alerts */
+.alert {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.alert:hover { background: var(--surface-2); }
+.alert:last-child { border-bottom: none; }
+.alert-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.alert-icon.amber { background: var(--amber-tint); color: var(--amber); }
+.alert-icon.red { background: var(--red-tint); color: var(--red); }
+.alert-icon.blue { background: var(--blue-tint); color: var(--blue); }
+.alert-icon.green { background: var(--doehler-green-tint); color: var(--doehler-green-dark); }
+.alert-body { flex: 1; }
+.alert-title {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.alert-desc {
+  font-size: 12px;
+  color: var(--text-2);
+}
+.alert-action {
+  font-size: 11px;
+  color: var(--doehler-green-dark);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* activity timeline */
+.activity {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 70px 18px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+.activity:last-child { border-bottom: none; }
+.activity .time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+.activity .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--doehler-green);
+  margin-left: 5px;
+}
+.activity .dot.amber { background: var(--amber); }
+.activity .dot.gray { background: var(--text-3); }
+.activity .text {
+  font-size: 13px;
+  color: var(--text-2);
+}
+.activity .text strong { color: var(--text); font-weight: 500; }
+.activity .text .mono { font-size: 12px; }
+
+/* ====== RECEIVING VIEW ====== */
+.receiving-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+}
+.tablet-frame {
+  background: var(--text);
+  border-radius: 16px;
+  padding: 14px;
+  position: relative;
+}
+.tablet-frame::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 30px;
+  background: #333;
+  border-radius: 2px;
+}
+.tablet-screen {
+  background: var(--surface);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.tablet-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.tablet-top .left { display: flex; align-items: center; gap: 10px; }
+.tablet-top .mark {
+  width: 28px;
+  height: 28px;
+  background: var(--doehler-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: white;
+}
+.tablet-top .title { font-weight: 500; font-size: 13px; }
+.tablet-top .subtitle { font-size: 11px; color: var(--text-3); }
+.tablet-top .right { display: flex; gap: 14px; font-size: 12px; color: var(--text-2); font-family: var(--font-mono); }
+
+.tablet-context {
+  background: var(--surface-2);
+  padding: 10px 18px;
+  font-size: 12px;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tablet-context .progress {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.tablet-context .progress span {
+  width: 6px;
+  height: 6px;
+  background: var(--border-2);
+  border-radius: 1px;
+}
+.tablet-context .progress span.done { background: var(--doehler-green); }
+.tablet-context .progress span.current { background: var(--doehler-green); animation: pulse 1.4s infinite; }
+
+.scan-rec {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  min-height: 380px;
+}
+.scan-pane {
+  padding: 24px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+.pane-label {
+  font-size: 10px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.drum-visual {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.drum-icon {
+  width: 64px;
+  height: 72px;
+  background: var(--amber-tint);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.drum-icon::before, .drum-icon::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 1px;
+  background: rgba(184, 134, 11, 0.25);
+}
+.drum-icon::before { top: 14px; }
+.drum-icon::after { bottom: 14px; }
+.drum-icon .ti { font-size: 32px; color: var(--amber); }
+.drum-name { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
+.drum-id { font-family: var(--font-mono); font-size: 12px; color: var(--text-2); }
+
+.drum-details { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; font-size: 12px; }
+.detail-label { color: var(--text-3); margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+.detail-value { font-weight: 500; }
+.detail-value.mono { font-family: var(--font-mono); font-weight: 400; }
+.detail-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.detail-badge.none { background: var(--surface-2); color: var(--text-2); }
+.detail-badge.peanut { background: var(--red-tint); color: var(--red); }
+.detail-badge.dairy { background: var(--blue-tint); color: var(--blue); }
+
+.rec-pane {
+  padding: 24px;
+  background: linear-gradient(180deg, var(--doehler-green-tint) 0%, var(--doehler-green-tint) 100%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.rec-pane.computing {
+  background: var(--surface-2);
+}
+.rec-pane .label-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.rec-pane .label-line .pane-label { color: var(--doehler-green-darker); margin-bottom: 0; }
+.confidence {
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: var(--doehler-green-darker);
+  font-weight: 500;
+}
+
+.slot-code {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--doehler-green-darker);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.slot-meta {
+  font-size: 13px;
+  color: var(--doehler-green-dark);
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.slot-meta .dot { width: 3px; height: 3px; background: var(--doehler-green-dark); border-radius: 50%; }
+
+.why-list {
+  list-style: none;
+  font-size: 12px;
+  color: var(--doehler-green-darker);
+  flex: 1;
+}
+.why-list li {
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid rgba(47, 78, 18, 0.15);
+}
+.why-list li:first-of-type { border-top: none; }
+.why-list .ti {
+  font-size: 14px;
+  color: var(--doehler-green);
+  flex-shrink: 0;
+}
+
+.tablet-actions {
+  display: flex;
+  gap: 10px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--border);
+}
+.tablet-actions .btn { padding: 10px 16px; font-size: 13px; }
+
+/* receiving sidebar */
+.recv-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.queue-list {
+  display: flex;
+  flex-direction: column;
+}
+.queue-item {
+  display: grid;
+  grid-template-columns: 30px 1fr 50px;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  cursor: pointer;
+}
+.queue-item:hover { background: var(--surface-2); }
+.queue-item.current { background: var(--doehler-green-tint); }
+.queue-item.done { color: var(--text-3); }
+.queue-item .idx { font-family: var(--font-mono); font-size: 11px; color: var(--text-3); }
+.queue-item.current .idx { color: var(--doehler-green-dark); font-weight: 500; }
+.queue-item.done .idx { color: var(--text-3); }
+.queue-item .lot { font-family: var(--font-mono); font-size: 11px; color: var(--text-2); margin-top: 2px; }
+.queue-item .slot { font-family: var(--font-mono); font-size: 11px; color: var(--doehler-green-dark); text-align: right; font-weight: 500; }
+
+/* ====== WAREHOUSE MAP ====== */
+.warehouse-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+}
+.warehouse-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.warehouse-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chip:hover { background: var(--surface-3); }
+.chip.active {
+  background: var(--text);
+  color: white;
+}
+.chip .ti { font-size: 12px; }
+.legend { display: flex; gap: 14px; align-items: center; font-size: 11px; color: var(--text-2); }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-sq { width: 10px; height: 10px; border-radius: 1px; }
+
+.warehouse-map {
+  background: var(--surface-2);
+  padding: 20px 18px;
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+}
+.zone-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.zone-row:last-child { margin-bottom: 0; }
+.zone-label {
+  width: 84px;
+  flex-shrink: 0;
+  padding-top: 8px;
+}
+.zone-label .name {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.zone-label .meta {
+  font-size: 10px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 3px;
+  flex: 1;
+}
+.slot {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: var(--surface-3);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.12s;
+  border: 1px solid transparent;
+}
+.slot:hover { transform: scale(1.15); z-index: 5; border-color: var(--text); }
+.slot.occupied { background: var(--doehler-green); }
+.slot.occupied.expiring { background: var(--amber); }
+.slot.occupied.critical { background: var(--red); }
+.slot.selected {
+  border: 1.5px solid var(--text);
+  transform: scale(1.25);
+  z-index: 6;
+  box-shadow: 0 0 0 2px var(--surface-2);
+}
+.slot.new {
+  animation: justPlaced 2.4s ease-out;
+}
+@keyframes justPlaced {
+  0% { transform: scale(2); background: white; box-shadow: 0 0 0 6px var(--doehler-green-tint); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* aisle dividers */
+.aisle {
+  height: 4px;
+  background: transparent;
+  margin: -4px 0;
+  border-top: 1px dashed var(--border-2);
+}
+
+/* warehouse side panel */
+.slot-detail {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  position: sticky;
+  top: 110px;
+}
+.slot-detail-head {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.slot-detail-code {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.slot-detail-zone { font-size: 12px; color: var(--text-2); }
+.slot-detail-body { padding: 16px 18px; }
+.slot-detail-section { margin-bottom: 16px; }
+.slot-detail-section:last-child { margin-bottom: 0; }
+.section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row .k { color: var(--text-2); }
+.detail-row .v { font-weight: 500; }
+.detail-row .v.mono { font-family: var(--font-mono); font-weight: 400; font-size: 11px; }
+.expiry-bar {
+  margin-top: 8px;
+  height: 3px;
+  background: var(--surface-3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.expiry-bar .fill {
+  height: 100%;
+  background: var(--doehler-green);
+  transition: width 0.4s;
+}
+.expiry-bar .fill.warn { background: var(--amber); }
+.expiry-bar .fill.critical { background: var(--red); }
+
+.empty-state {
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 13px;
+}
+.empty-state .ti { font-size: 32px; opacity: 0.4; margin-bottom: 8px; display: block; }
+
+/* ====== INSIGHTS VIEW ====== */
+.insights-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 16px;
+}
+.chat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  min-height: 580px;
+  overflow: hidden;
+}
+.chat-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chat-head h3 { font-size: 14px; font-weight: 500; }
+.chat-head .ai-badge {
+  font-size: 10px;
+  font-weight: 500;
+  background: var(--doehler-green-tint);
+  color: var(--doehler-green-darker);
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.chat-feed {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.chat-msg { display: flex; gap: 12px; }
+.chat-msg.user { justify-content: flex-end; }
+.chat-msg.user .bubble {
+  background: var(--text);
+  color: white;
+  border-radius: 12px 12px 2px 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  max-width: 70%;
+}
+.chat-msg.ai .bubble {
+  background: var(--surface-2);
+  border-radius: 12px 12px 12px 2px;
+  padding: 12px 14px;
+  font-size: 13px;
+  max-width: 85%;
+}
+.chat-msg.ai .bubble .ans {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.chat-msg.ai .bubble .data-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  font-size: 12px;
+}
+.chat-msg.ai .bubble .data-block .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+.chat-msg.ai .bubble .data-block .row .l { color: var(--text-2); }
+.chat-msg.ai .bubble .data-block .row .r { font-family: var(--font-mono); font-weight: 500; }
+.chat-msg .source {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.chat-msg .source .ti { font-size: 11px; }
+.chat-input-wrap {
+  border-top: 1px solid var(--border);
+  padding: 14px 20px;
+  background: var(--surface);
+}
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.suggestion {
+  font-size: 12px;
+  padding: 5px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.12s;
+  color: var(--text-2);
+}
+.suggestion:hover { background: var(--doehler-green-tint); border-color: var(--doehler-green); color: var(--doehler-green-darker); }
+.chat-input {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.chat-input input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 13px;
+  background: var(--surface);
+}
+.chat-input input:focus { outline: none; border-color: var(--doehler-green); }
+.chat-input .send-btn {
+  background: var(--doehler-green);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chat-input .send-btn:hover { background: var(--doehler-green-dark); }
+.chat-input .send-btn .ti { font-size: 16px; }
+
+/* predictions panel */
+.predictions-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+}
+.prediction {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.prediction:last-child { border-bottom: none; }
+.pred-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.pred-title { font-size: 12px; font-weight: 500; }
+.pred-badge {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+.pred-badge.high { background: var(--red-tint); color: var(--red); }
+.pred-badge.med { background: var(--amber-tint); color: var(--amber); }
+.pred-badge.low { background: var(--blue-tint); color: var(--blue); }
+.pred-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; margin-bottom: 6px; }
+.pred-data { font-family: var(--font-mono); font-size: 11px; color: var(--text-3); }
+.pred-action {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--doehler-green-dark);
+  font-weight: 500;
+  cursor: pointer;
+}
+.pred-action:hover { text-decoration: underline; }
+
+/* footer */
+footer {
+  padding: 28px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-3);
+  border-top: 1px solid var(--border);
+  margin-top: 60px;
+}
+footer .mono { color: var(--text-2); }
+
+/* utilities */
+.row { display: flex; align-items: center; gap: 8px; }
+.spacer { flex: 1; }
+
+/* toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--text);
+  color: white;
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 200;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.25s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: var(--doehler-green-darker); }
+.toast .ti { font-size: 16px; color: var(--doehler-green); }
+
+/* ====== LOGIN SCREEN ====== */
+body.logged-out > header,
+body.logged-out > main,
+body.logged-out > footer { display: none; }
+body.logged-out { overflow: hidden; }
+
+.login-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  background: var(--surface);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+.login-screen.fading { opacity: 0; pointer-events: none; }
+
+.login-left {
+  background: #131814;
+  color: white;
+  padding: 56px 64px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 360px;
+  height: 360px;
+  background: var(--doehler-green);
+  opacity: 0.08;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.login-left::after {
+  content: '';
+  position: absolute;
+  bottom: -180px;
+  left: -80px;
+  width: 320px;
+  height: 320px;
+  background: var(--doehler-green);
+  opacity: 0.05;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-left .brand-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: auto;
+  position: relative;
+  z-index: 1;
+}
+.login-left .brand-mark .doehler-wordmark {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: white;
+}
+.login-left .brand-mark .doehler-wordmark::after {
+  content: '.';
+  color: var(--doehler-green);
+  font-weight: 600;
+}
+.login-left .brand-mark .brand-mark-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.login-headline {
+  font-size: 56px;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 80px 0 24px;
+  position: relative;
+  z-index: 1;
+}
+.login-headline .accent { color: var(--doehler-green); font-weight: 400; }
+
+.login-sub {
+  font-size: 16px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.55;
+  max-width: 440px;
+  margin-bottom: 48px;
+  position: relative;
+  z-index: 1;
+}
+
+.login-stats {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 40px;
+  margin-bottom: auto;
+  position: relative;
+  z-index: 1;
+}
+.login-stat .v {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.login-stat .v .unit { font-size: 14px; color: rgba(255,255,255,0.5); margin-left: 2px; }
+.login-stat .l {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.login-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.gemstones {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.gemstones .gem {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.gemstones .label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.login-credit {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.login-credit .vc-mark {
+  position: relative;
+  width: 9px;
+  height: 9px;
+}
+.login-credit .vc-mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--doehler-green);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.login-credit .vc-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  clip-path: polygon(50% 50%, 100% 50%, 50% 100%);
+}
+
+.login-right {
+  padding: 56px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--surface);
+}
+.login-form-wrap {
+  max-width: 380px;
+  width: 100%;
+  margin: 0 auto;
+}
+.tenant-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  background: var(--doehler-green-tint);
+  color: var(--doehler-green-darker);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.tenant-line .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--doehler-green);
+}
+
+.login-form-wrap h2 {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.login-form-wrap .hint {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-bottom: 32px;
+}
+
+.login-form { display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+.field input {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+.field input:focus { outline: none; border-color: var(--doehler-green); box-shadow: 0 0 0 3px var(--doehler-green-tint); }
+.field input.mono { font-family: var(--font-mono); letter-spacing: 0.04em; }
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -2px;
+}
+.field-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.field-row a {
+  font-size: 12px;
+  color: var(--doehler-green-dark);
+  text-decoration: none;
+}
+.field-row a:hover { text-decoration: underline; }
+
+.btn.full {
+  width: 100%;
+  justify-content: center;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+  font-size: 11px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.login-divider::before, .login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.sso-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sso-btn:hover { background: var(--surface-2); border-color: var(--text); }
+.sso-btn .ms-icon {
+  width: 16px; height: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+}
+.sso-btn .ms-icon span { display: block; }
+.sso-btn .ms-icon span:nth-child(1) { background: #F25022; }
+.sso-btn .ms-icon span:nth-child(2) { background: #7FBA00; }
+.sso-btn .ms-icon span:nth-child(3) { background: #00A4EF; }
+.sso-btn .ms-icon span:nth-child(4) { background: #FFB900; }
+
+.login-foot {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-3);
+}
+.login-foot .secured { display: flex; align-items: center; gap: 6px; }
+.login-foot .secured .ti { font-size: 12px; color: var(--doehler-green); }
+
+/* loading state */
+.login-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.login-loading.show { opacity: 1; pointer-events: all; }
+.loading-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 48px;
+  min-width: 460px;
+  text-align: left;
+}
+.loading-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.loading-brand .mark {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.loading-brand .mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--doehler-green);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.loading-brand .mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  clip-path: polygon(50% 50%, 100% 50%, 50% 100%);
+}
+.loading-brand .name {
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+.loading-brand .sub {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-left: 4px;
+}
+
+.loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.load-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 13px;
+  color: var(--text-3);
+  transition: color 0.3s;
+  border-bottom: 1px solid var(--border);
+}
+.load-step:last-child { border-bottom: none; }
+.load-step .icon-slot {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.load-step .icon-slot .ti { font-size: 14px; }
+.load-step.active {
+  color: var(--text);
+}
+.load-step.active .icon-slot .ti {
+  color: var(--doehler-green);
+  animation: spin 0.8s linear infinite;
+}
+.load-step.done {
+  color: var(--text-2);
+}
+.load-step.done .icon-slot .ti {
+  color: var(--doehler-green);
+  animation: none;
+}
+.load-step .meta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-progress {
+  margin-top: 28px;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loading-progress .bar {
+  height: 100%;
+  background: var(--doehler-green);
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* sign-out chip in header */
+.user-chip {
+  cursor: pointer;
+}
+.user-chip:hover .signout {
+  color: var(--red);
+}
+.user-chip .signout {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-left: 4px;
+  transition: color 0.15s;
+}
+
+/* ====== SCANNER VIEWFINDER ====== */
+.scanner-viewfinder {
+  background: #131814;
+  border-radius: var(--radius);
+  aspect-ratio: 4 / 2.5;
+  position: relative;
+  margin-bottom: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+.scanner-viewfinder .viewfinder-icon {
+  font-size: 56px;
+  color: rgba(107, 165, 57, 0.5);
+  z-index: 1;
+}
+.scanner-viewfinder.scanning .viewfinder-icon {
+  color: rgba(107, 165, 57, 0.85);
+}
+.scanner-viewfinder .viewfinder-text {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 500;
+  z-index: 1;
+}
+.scanner-viewfinder .corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: var(--doehler-green);
+  border-style: solid;
+  border-width: 0;
+}
+.scanner-viewfinder .corner.tl { top: 10px; left: 10px; border-top-width: 2px; border-left-width: 2px; }
+.scanner-viewfinder .corner.tr { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; }
+.scanner-viewfinder .corner.bl { bottom: 10px; left: 10px; border-bottom-width: 2px; border-left-width: 2px; }
+.scanner-viewfinder .corner.br { bottom: 10px; right: 10px; border-bottom-width: 2px; border-right-width: 2px; }
+
+.scanner-viewfinder.scanning .corner { animation: cornerPulse 0.8s ease-in-out infinite alternate; }
+@keyframes cornerPulse {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+.scanner-viewfinder .scan-line {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: var(--doehler-green);
+  box-shadow: 0 0 14px 2px var(--doehler-green), 0 0 3px var(--doehler-green);
+  animation: scanLine 1.4s ease-in-out infinite alternate;
+}
+@keyframes scanLine {
+  0% { top: 14%; }
+  100% { top: 86%; }
+}
+
+.scan-trigger {
+  width: 100%;
+  justify-content: center;
+  padding: 14px;
+  font-size: 14px;
+  position: relative;
+}
+.scan-trigger kbd {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(255,255,255,0.15);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.scan-trigger:disabled {
+  background: var(--surface-3);
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+.scan-trigger .ti.spin { animation: spin 0.8s linear infinite; }
+
+/* ====== AI ENGINE STATES ====== */
+.ai-waiting, .ai-computing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 0;
+  flex: 1;
+}
+.ai-waiting .ti { font-size: 32px; color: var(--text-3); margin-bottom: 10px; }
+.ai-waiting .t { font-size: 14px; font-weight: 500; color: var(--text-2); }
+.ai-waiting .sub { font-size: 12px; color: var(--text-3); }
+
+.ai-computing .ti.big { font-size: 24px; color: var(--doehler-green); margin-bottom: 8px; }
+.ai-computing .t { font-size: 14px; font-weight: 500; color: var(--doehler-green-darker); margin-bottom: 12px; }
+.ai-computing .steps {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ai-computing .step {
+  font-size: 12px;
+  color: var(--text-3);
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.3s;
+}
+.ai-computing .step::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  flex-shrink: 0;
+}
+.ai-computing .step.active { color: var(--doehler-green-darker); }
+.ai-computing .step.active::before { background: var(--doehler-green); animation: pulse 1s infinite; }
+.ai-computing .step.done { color: var(--text-2); }
+.ai-computing .step.done::before { background: var(--doehler-green); }
+
+.placing-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  grid-column: 1 / -1;
+  background: var(--doehler-green-tint);
+}
+.placing-state .ti { font-size: 48px; color: var(--doehler-green); margin-bottom: 12px; }
+.placing-state .t { font-size: 18px; font-weight: 500; color: var(--doehler-green-darker); margin-bottom: 4px; }
+.placing-state .sub { font-size: 13px; color: var(--doehler-green-dark); font-family: var(--font-mono); }
+
+.complete-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+.complete-state .ti { font-size: 56px; color: var(--doehler-green); margin-bottom: 14px; }
+.complete-state .t { font-size: 18px; font-weight: 500; margin-bottom: 6px; }
+.complete-state .sub { font-size: 13px; color: var(--text-2); margin-bottom: 18px; }
+
+/* ====== MODAL ====== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(19, 24, 20, 0.55);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  animation: fadeIn 0.2s ease;
+}
+.modal-backdrop.show { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  max-width: 520px;
+  width: 100%;
+  max-height: 82vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-head {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-head h3 { font-size: 16px; font-weight: 500; }
+.modal-head .meta { font-size: 11px; color: var(--text-3); font-family: var(--font-mono); }
+.modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-2);
+  padding: 4px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.modal-close:hover { background: var(--surface-2); color: var(--text); }
+.modal-body { padding: 20px 22px; overflow-y: auto; }
+.modal-foot {
+  padding: 14px 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.timeline-event {
+  display: grid;
+  grid-template-columns: 100px 18px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+}
+.timeline-event .when { font-family: var(--font-mono); font-size: 11px; color: var(--text-3); padding-top: 2px; }
+.timeline-event .marker { position: relative; padding-top: 2px; }
+.timeline-event .marker::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--doehler-green);
+  z-index: 1;
+}
+.timeline-event .marker::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 7px;
+  bottom: -10px;
+  width: 1px;
+  background: var(--border);
+}
+.timeline-event:last-child .marker::after { display: none; }
+.timeline-event .what .title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.timeline-event .what .desc { font-size: 12px; color: var(--text-2); }
+
+.slot-pick {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.slot-pick:hover { border-color: var(--doehler-green); background: var(--doehler-green-tint); }
+.slot-pick .code { font-family: var(--font-mono); font-weight: 500; font-size: 14px; }
+.slot-pick .info { flex: 1; font-size: 12px; color: var(--text-2); }
+.slot-pick .conf { font-family: var(--font-mono); font-size: 11px; color: var(--doehler-green-dark); font-weight: 500; }
+
+/* ====== PLAN BANNER (dashboard) ====== */
+.plan-banner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(110deg, var(--doehler-green-darker), var(--doehler-green-dark));
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.plan-banner::after {
+  content: '';
+  position: absolute;
+  right: -60px; top: -60px;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+}
+.plan-banner .pb-icon {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0; z-index: 1;
+}
+.plan-banner .pb-text { flex: 1; z-index: 1; }
+.plan-banner .pb-text .t { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+.plan-banner .pb-text .s { font-size: 12.5px; color: rgba(255,255,255,0.82); }
+.plan-banner .pb-text .s .mono { color: #fff; }
+.plan-banner .pb-stats { display: flex; gap: 26px; z-index: 1; }
+.plan-banner .pb-stat .v { font-family: var(--font-mono); font-size: 22px; font-weight: 500; line-height: 1; }
+.plan-banner .pb-stat .l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.62); margin-top: 4px; }
+.plan-banner .btn { z-index: 1; background: #fff; color: var(--doehler-green-darker); }
+.plan-banner .btn:hover { background: var(--doehler-green-tint); }
+
+/* ====== WAREHOUSE SWITCH ====== */
+.wh-switch { display: flex; gap: 4px; background: var(--surface-2); padding: 3px; border-radius: var(--radius); }
+.wh-switch button {
+  font-size: 12px; padding: 7px 14px; border-radius: 3px;
+  color: var(--text-2); font-weight: 500; display: flex; align-items: center; gap: 8px;
+}
+.wh-switch button .cap { font-family: var(--font-mono); font-size: 10px; color: var(--text-3); }
+.wh-switch button.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.07); }
+.wh-switch button.active .cap { color: var(--doehler-green-dark); }
+
+/* new slot states */
+.slot.occupied.reslot { background: var(--amber); }
+.slot.reserved { background: var(--blue-tint); border: 1px dashed var(--blue); }
+
+/* fit bar (placement quality) */
+.fit-bar { margin-top: 8px; height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.fit-bar .fill { height: 100%; background: var(--doehler-green); transition: width 0.4s; }
+.fit-bar .fill.mid { background: var(--amber); }
+
+/* ====== PLANNING VIEW ====== */
+.planning-layout { display: grid; grid-template-columns: 1fr 340px; gap: 16px; align-items: start; }
+.plan-main { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.plan-steps { display: flex; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.plan-steps .pstep {
+  flex: 1; padding: 14px 18px; display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--text-3);
+}
+.plan-steps .pstep:not(:last-child) { border-right: 1px solid var(--border); }
+.plan-steps .pstep .num {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--surface-3); color: var(--text-3);
+  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; font-family: var(--font-mono); flex-shrink: 0;
+}
+.plan-steps .pstep.active { color: var(--text); background: var(--surface); }
+.plan-steps .pstep.active .num { background: var(--doehler-green); color: #fff; }
+.plan-steps .pstep.done { color: var(--text-2); }
+.plan-steps .pstep.done .num { background: var(--doehler-green-darker); color: #fff; }
+.plan-stage { padding: 22px; min-height: 430px; }
+
+.dropzone {
+  border: 1.5px dashed var(--border-2); border-radius: var(--radius-lg);
+  padding: 48px 24px; text-align: center; background: var(--surface-2);
+  transition: all 0.15s; cursor: pointer;
+}
+.dropzone:hover { border-color: var(--doehler-green); background: var(--doehler-green-tint); }
+.dropzone .dz-icon { font-size: 46px; color: var(--doehler-green); margin-bottom: 12px; }
+.dropzone .dz-t { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+.dropzone .dz-s { font-size: 12.5px; color: var(--text-2); margin-bottom: 18px; max-width: 420px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+
+.csv-pill {
+  display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px;
+  background: var(--surface-2); border: 1px solid var(--border); padding: 6px 12px; border-radius: var(--radius); color: var(--text-2);
+}
+.csv-pill .ti { color: var(--doehler-green-dark); font-size: 15px; }
+.csv-pill.ok { background: var(--doehler-green-tint); border-color: var(--doehler-green-tint-2); color: var(--doehler-green-darker); }
+
+.stage-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; gap: 14px; }
+.stage-head .st { font-size: 15px; font-weight: 500; }
+.stage-head .ss { font-size: 12px; color: var(--text-2); margin-top: 3px; line-height: 1.5; }
+
+.mtable { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.mtable th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); font-weight: 500; padding: 8px 10px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); }
+.mtable td { padding: 9px 10px; border-bottom: 1px solid var(--border); }
+.mtable tr:last-child td { border-bottom: none; }
+.mtable tbody tr:hover td { background: var(--surface-2); }
+.mtable .mono { font-family: var(--font-mono); font-size: 11.5px; }
+.mtable .slot-cell { font-family: var(--font-mono); font-weight: 500; color: var(--doehler-green-darker); }
+.mtable .num-cell { font-family: var(--font-mono); text-align: right; }
+.mtable .why { color: var(--text-2); font-size: 11.5px; }
+.mtable .wh-tag { font-size: 10px; font-weight: 500; color: var(--text-3); display: block; }
+.tbl-scroll { max-height: 320px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.tbl-foot { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; font-size: 12px; color: var(--text-2); background: var(--surface-2); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); }
+.tbl-foot .mono { font-family: var(--font-mono); }
+
+.optimise-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.opt-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+.opt-card .oc-l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3); margin-bottom: 8px; font-weight: 500; }
+.opt-card .oc-v { font-size: 24px; font-weight: 500; font-family: var(--font-mono); letter-spacing: -0.01em; line-height: 1; }
+.opt-card .oc-v .u { font-size: 12px; color: var(--text-2); }
+.opt-card .oc-d { font-size: 11px; color: var(--doehler-green-dark); margin-top: 5px; }
+
+.ba-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; }
+.beforeafter { display: flex; align-items: center; gap: 16px; }
+.beforeafter .ba { flex: 1; }
+.beforeafter .ba .lbl { font-size: 11px; color: var(--text-3); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.beforeafter .ba .lbl b { color: var(--text); font-weight: 500; font-family: var(--font-mono); }
+.beforeafter .bar { height: 10px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.beforeafter .bar > i { display: block; height: 100%; background: var(--doehler-green); border-radius: 3px; }
+.beforeafter .bar.amber > i { background: var(--amber); }
+.beforeafter .arrow { color: var(--text-3); font-size: 20px; }
+
+.composite-key { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.composite-key .ck { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--text-2); }
+.composite-key .ck .sw { width: 10px; height: 10px; border-radius: 2px; }
+
+/* plan aside */
+.plan-aside { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); position: sticky; top: 110px; overflow: hidden; }
+.plan-aside .pa-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.plan-aside .pa-head h3 { font-size: 14px; font-weight: 500; }
+.plan-aside .pa-body { padding: 4px 18px 12px; }
+.pa-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.pa-row:last-child { border-bottom: none; }
+.pa-row .k { font-size: 12px; color: var(--text-2); display: flex; align-items: center; gap: 9px; }
+.pa-row .k .ti { font-size: 16px; color: var(--text-3); }
+.pa-row .v { font-family: var(--font-mono); font-size: 13px; font-weight: 500; }
+.pa-row.pending .v { color: var(--text-3); font-weight: 400; }
+.pa-row.ok .k .ti { color: var(--doehler-green); }
+.pa-foot { padding: 14px 18px; border-top: 1px solid var(--border); background: var(--surface-2); display: flex; flex-direction: column; gap: 8px; }
+.pa-foot .btn { justify-content: center; }
+.pa-foot .btn:disabled { background: var(--surface-3); color: var(--text-3); cursor: not-allowed; }
+.pa-foot .btn.ghost:disabled { background: transparent; border-color: var(--border); color: var(--text-3); }
+
+.plan-done { text-align: center; padding: 30px 20px; }
+.plan-done .pd-icon { font-size: 60px; color: var(--doehler-green); margin-bottom: 14px; }
+.plan-done .pd-t { font-size: 19px; font-weight: 500; margin-bottom: 6px; }
+.plan-done .pd-s { font-size: 13px; color: var(--text-2); margin-bottom: 22px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.55; }
+.plan-done .pd-actions { display: flex; gap: 10px; justify-content: center; }
+
+</style>
+</head>
+<body class="logged-out">
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-left">
+    <div class="brand-mark">
+      <div class="doehler-wordmark">Doehler</div>
+      <div class="brand-mark-sub">Holland BV · Oosterhout</div>
+    </div>
+
+    <div>
+      <div class="login-headline">
+        Plan tonight.<br>
+        Place tomorrow.<br>
+        <span class="accent">Zero re-work.</span>
+      </div>
+      <div class="login-sub">
+        Your putaway intelligence layer for both Oosterhout warehouses — 150,000 drum positions. Upload the noon manifest, let the engine optimise existing storage and pre-allocate every incoming drum, and hand each forklift the exact slot. No live SAP link required.
+      </div>
+
+      <div class="login-stats">
+        <div class="login-stat">
+          <div class="v">−41<span class="unit">%</span></div>
+          <div class="l">Putaway time</div>
+        </div>
+        <div class="login-stat">
+          <div class="v">+9<span class="unit">%</span></div>
+          <div class="l">Space recovered</div>
+        </div>
+        <div class="login-stat">
+          <div class="v">0</div>
+          <div class="l">Live API links</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-bottom">
+      <div class="gemstones" title="A nod to Doehler's natural colours portfolio">
+        <div class="gem" style="background: #EFD15F"></div>
+        <div class="gem" style="background: #E08940"></div>
+        <div class="gem" style="background: #C73E3E"></div>
+        <div class="gem" style="background: #7E4E9D"></div>
+        <div class="gem" style="background: #6BA539"></div>
+        <div class="gem" style="background: #2A6BB6"></div>
+        <span class="label">Aligned with Doehler natural colours</span>
+      </div>
+      <div class="login-credit"><span class="vc-mark"></span> built by Crux Digits · cruxdigits.nl</div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-form-wrap">
+      <div class="tenant-line">
+        <span class="dot"></span> Doehler Holland BV · production tenant
+      </div>
+
+      <h2>Sign in</h2>
+      <div class="hint">Use your Doehler corporate credentials.</div>
+
+      <div class="login-form">
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" value="jan.pieters@doehler.com" autocomplete="username" />
+        </div>
+        <div class="field">
+          <label for="loginPass">Password</label>
+          <input id="loginPass" type="password" value="demo-password-2026" autocomplete="current-password" class="mono" />
+        </div>
+        <div class="field-row">
+          <label><input type="checkbox" checked /> Remember this device (30 days)</label>
+          <a href="#" onclick="event.preventDefault(); openHelpModal()">Need help?</a>
+        </div>
+        <button class="btn primary full" onclick="performLogin('credentials')">
+          Sign in <i class="ti ti-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="login-divider">or</div>
+
+      <button class="sso-btn" onclick="performLogin('sso')">
+        <span class="ms-icon"><span></span><span></span><span></span><span></span></span>
+        Continue with Doehler SSO
+      </button>
+
+      <div class="login-foot">
+        <div class="secured"><i class="ti ti-shield-check"></i> SSO secured · audit trail enabled</div>
+        <div>v0.4</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading sequence -->
+<div class="login-loading" id="loginLoading">
+  <div class="loading-card">
+    <div class="loading-brand">
+      <div class="mark"></div>
+      <div>
+        <div class="name">Smart Putaway<span class="sub"> · Doehler Holland BV</span></div>
+      </div>
+    </div>
+    <div class="loading-steps">
+      <div class="load-step" data-step="1">
+        <span class="icon-slot"><i class="ti ti-circle"></i></span>
+        <span>Authenticating with Doehler Azure AD</span>
+        <span class="meta"></span>
+      </div>
+      <div class="load-step" data-step="2">
+        <span class="icon-slot"><i class="ti ti-circle"></i></span>
+        <span>Importing warehouse snapshot · SAP WMS export (CSV)</span>
+        <span class="meta"></span>
+      </div>
+      <div class="load-step" data-step="3">
+        <span class="icon-slot"><i class="ti ti-circle"></i></span>
+        <span>Loading 150,000 drum positions · 2 sites</span>
+        <span class="meta"></span>
+      </div>
+      <div class="load-step" data-step="4">
+        <span class="icon-slot"><i class="ti ti-circle"></i></span>
+        <span>Reading tomorrow's manifest · 312 drums, 9 trucks</span>
+        <span class="meta"></span>
+      </div>
+      <div class="load-step" data-step="5">
+        <span class="icon-slot"><i class="ti ti-circle"></i></span>
+        <span>Personalising for J. Pieters · Logistics Manager</span>
+        <span class="meta"></span>
+      </div>
+    </div>
+    <div class="loading-progress"><div class="bar" id="loadingBar"></div></div>
+  </div>
+</div>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-logo">
+        <div class="mark"></div>
+        <div class="name">Smart Putaway</div>
+      </div>
+      <div class="brand-divider"></div>
+      <div class="brand-client">
+        <span class="tenant-dot"></span>
+        <strong>Doehler Holland BV</strong>
+        <span class="tenant-sub">Oosterhout · 2 warehouses</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="nl-search">
+        <i class="ti ti-search"></i>
+        <input type="text" id="globalSearch" placeholder="Ask anything — where is lot 244-ORG-16?" />
+        <span class="kbd">⌘ K</span>
+      </div>
+      <div class="user-chip" onclick="signOut()" title="Click to sign out">
+        <div class="avatar">JP</div>
+        <span>Jan Pieters · Logistics Manager</span>
+        <span class="signout"><i class="ti ti-logout" style="font-size: 14px; vertical-align: -2px;"></i></span>
+      </div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" data-view="dashboard"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
+    <button class="tab-btn" data-view="planning"><i class="ti ti-calendar-event"></i> Planning <span class="badge" style="background: var(--doehler-green);">tomorrow</span></button>
+    <button class="tab-btn" data-view="receiving"><i class="ti ti-truck-delivery"></i> Putaway <span class="badge">24</span></button>
+    <button class="tab-btn" data-view="warehouse"><i class="ti ti-building-warehouse"></i> Warehouse</button>
+    <button class="tab-btn" data-view="insights"><i class="ti ti-sparkles"></i> Insights</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ DASHBOARD ============ -->
+<section class="view active" id="view-dashboard">
+  <div class="section-header">
+    <div>
+      <h1>Operations dashboard</h1>
+      <div class="sub">Two warehouses · Oosterhout · next-day planning &amp; slot optimisation</div>
+    </div>
+    <div class="meta">
+      <div>Thursday, 28 May 2026</div>
+      <div id="liveTime">14:22:08 CET</div>
+    </div>
+  </div>
+
+  <div class="plan-banner">
+    <div class="pb-icon"><i class="ti ti-calendar-event"></i></div>
+    <div class="pb-text">
+      <div class="t">Tomorrow's putaway plan is ready</div>
+      <div class="s">Friday 29 May · generated 12:04 from <span class="mono">manifest_2026-05-29.csv</span> · published to tablets at 06:00</div>
+    </div>
+    <div class="pb-stats">
+      <div class="pb-stat"><div class="v">312</div><div class="l">Drums</div></div>
+      <div class="pb-stat"><div class="v">9</div><div class="l">Trucks</div></div>
+      <div class="pb-stat"><div class="v">94</div><div class="l">Opt. score</div></div>
+    </div>
+    <button class="btn" onclick="switchView('planning')">Review &amp; publish <i class="ti ti-arrow-right"></i></button>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">Put away today</div>
+      <div class="kpi-value">138<span class="kpi-unit">drums</span></div>
+      <div class="kpi-delta up"><i class="ti ti-trending-up"></i> +12% vs Wed</div>
+    </div>
+    <div class="kpi" style="cursor: pointer;" onclick="switchView('planning')">
+      <div class="kpi-label">Tomorrow's plan</div>
+      <div class="kpi-value">312<span class="kpi-unit">drums</span></div>
+      <div class="kpi-delta up"><i class="ti ti-circle-check"></i> 9 trucks · ready</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Avg putaway time</div>
+      <div class="kpi-value">47<span class="kpi-unit">sec</span></div>
+      <div class="kpi-delta up"><i class="ti ti-trending-down"></i> −41% baseline</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Space recovered (30d)</div>
+      <div class="kpi-value">+9<span class="kpi-unit">%</span></div>
+      <div class="kpi-delta up"><i class="ti ti-stack-2"></i> 2,140 positions</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Fill rate · both sites</div>
+      <div class="kpi-value">73<span class="kpi-unit">%</span></div>
+      <div class="kpi-delta neutral"><i class="ti ti-minus"></i> WH-1 78% · WH-2 64%</div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="card">
+      <div class="card-head">
+        <h3>Tomorrow's inbound — Fri 29 May</h3>
+        <span class="count">9 scheduled</span>
+      </div>
+      <div class="card-body">
+        <div class="truck-row">
+          <div>
+            <span class="status-dot scheduled"></span>
+            <span class="ident">DHL-4421</span>
+          </div>
+          <div class="cargo">Fruit concentrate</div>
+          <div class="drums">0 / 46</div>
+          <div class="eta">06:30</div>
+          <button class="btn ghost" onclick="switchView('planning')">View plan</button>
+        </div>
+        <div class="truck-row">
+          <div>
+            <span class="status-dot scheduled"></span>
+            <span class="ident">MAERSK-8821</span>
+          </div>
+          <div class="cargo">Natural colour</div>
+          <div class="drums">0 / 38</div>
+          <div class="eta">07:15</div>
+          <button class="btn ghost" onclick="switchView('planning')">View plan</button>
+        </div>
+        <div class="truck-row">
+          <div>
+            <span class="status-dot scheduled"></span>
+            <span class="ident">DSV-3340</span>
+          </div>
+          <div class="cargo">Flavour system</div>
+          <div class="drums">0 / 32</div>
+          <div class="eta">08:00</div>
+          <button class="btn ghost" onclick="switchView('planning')">View plan</button>
+        </div>
+        <div class="truck-row" style="justify-content: center; color: var(--text-3); font-size: 12px;">
+          <div style="grid-column: 1 / -1; text-align: center;">+ 6 more trucks · <a href="#" onclick="event.preventDefault(); switchView('planning')" style="color: var(--doehler-green-dark);">open the full plan →</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>Action queue</h3>
+        <span class="count">5 items</span>
+      </div>
+      <div class="card-body">
+        <div class="alert" onclick="handleAlert('optimise-wh1')">
+          <div class="alert-icon green"><i class="ti ti-stack-2"></i></div>
+          <div class="alert-body">
+            <div class="alert-title">Storage optimisation ready · WH-1</div>
+            <div class="alert-desc">86 re-slots consolidate fragmented bays — frees 312 positions.</div>
+            <div class="alert-action">Review job →</div>
+          </div>
+        </div>
+        <div class="alert" onclick="switchView('planning')">
+          <div class="alert-icon amber"><i class="ti ti-clipboard-list"></i></div>
+          <div class="alert-body">
+            <div class="alert-title">Tomorrow needs 312 positions</div>
+            <div class="alert-desc">271 free now — optimisation covers the remaining 41.</div>
+            <div class="alert-action">Open planning →</div>
+          </div>
+        </div>
+        <div class="alert" onclick="handleAlert('rebalance')">
+          <div class="alert-icon blue"><i class="ti ti-arrows-left-right"></i></div>
+          <div class="alert-body">
+            <div class="alert-title">Balance load to Warehouse 2</div>
+            <div class="alert-desc">WH-1 at 78%, WH-2 at 64% — shift 120 slow-mover drums.</div>
+            <div class="alert-action">Proposal ready →</div>
+          </div>
+        </div>
+        <div class="alert" onclick="handleAlert('misplacement')">
+          <div class="alert-icon amber"><i class="ti ti-arrows-shuffle"></i></div>
+          <div class="alert-body">
+            <div class="alert-title">Misplacement detected</div>
+            <div class="alert-desc">Lot 244-CON-87 in block D — manifest assigned block A.</div>
+            <div class="alert-action">View on map →</div>
+          </div>
+        </div>
+        <div class="alert" onclick="switchView('planning')">
+          <div class="alert-icon green"><i class="ti ti-file-spreadsheet"></i></div>
+          <div class="alert-body">
+            <div class="alert-title">Manifest received · 12:00 CET</div>
+            <div class="alert-desc">Friday manifest imported — 312 drums ready to plan.</div>
+            <div class="alert-action">Start planning →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <h3>Recent activity</h3>
+      <span class="count">Last 4 hours</span>
+    </div>
+    <div class="card-body">
+      <div class="activity">
+        <span class="time mono">12:04</span>
+        <span class="dot"></span>
+        <span class="text">Manifest imported — <strong>Friday 29 May</strong> · 312 drums, 9 trucks via SAP WMS CSV</span>
+      </div>
+      <div class="activity">
+        <span class="time mono">11:48</span>
+        <span class="dot"></span>
+        <span class="text"><strong>Truck CTW-2207</strong> completed — 26 drums put away · avg 44 sec each</span>
+      </div>
+      <div class="activity">
+        <span class="time mono">11:30</span>
+        <span class="dot"></span>
+        <span class="text">Optimisation run — <strong>64 drums</strong> consolidated in WH-1 block C · 240 positions freed</span>
+      </div>
+      <div class="activity">
+        <span class="time mono">10:15</span>
+        <span class="dot"></span>
+        <span class="text"><strong>Truck DHL-4419</strong> completed — 31 drums put away</span>
+      </div>
+      <div class="activity">
+        <span class="time mono">09:50</span>
+        <span class="dot gray"></span>
+        <span class="text">Allocations exported — <span class="mono">putaway_2026-05-28.csv</span> → SAP WMS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLANNING ============ -->
+<section class="view" id="view-planning">
+  <div class="section-header">
+    <div>
+      <h1>Next-day planning</h1>
+      <div class="sub">Import the noon manifest · optimise existing storage · pre-allocate every drum</div>
+    </div>
+    <div class="meta">
+      <div>Manifest window</div>
+      <div class="mono">Daily 12:00 CET</div>
+    </div>
+  </div>
+
+  <div class="planning-layout">
+    <div class="plan-main">
+      <div class="plan-steps" id="planStepsBar"></div>
+      <div class="plan-stage" id="planStage"></div>
+    </div>
+    <div class="plan-aside" id="planAside"></div>
+  </div>
+</section>
+
+<!-- ============ PUTAWAY (forklift) ============ -->
+<section class="view" id="view-receiving">
+  <div class="section-header">
+    <div>
+      <h1>Putaway · Bay 3</h1>
+      <div class="sub">Truck <span class="mono">DHL-4421</span> · 24 drums · pre-slotted in the 12:00 plan</div>
+    </div>
+    <div class="meta">
+      <div>Forklift operator</div>
+      <div>R. de Vries</div>
+    </div>
+  </div>
+
+  <div class="receiving-layout">
+    <div class="tablet-frame">
+      <div class="tablet-screen">
+        <div class="tablet-top">
+          <div class="left">
+            <div class="mark"><i class="ti ti-package"></i></div>
+            <div>
+              <div class="title">Smart putaway</div>
+              <div class="subtitle">Doehler · Oosterhout WH-1</div>
+            </div>
+          </div>
+          <div class="right">
+            <span id="recvClock">14:22</span>
+            <span>R. de Vries</span>
+          </div>
+        </div>
+        <div class="tablet-context">
+          <div>
+            <i class="ti ti-truck-delivery"></i> Receiving · Truck DHL-4421 · Drum <span id="drumNum" class="mono">7</span> of 24
+          </div>
+          <div class="progress" id="progressBar"></div>
+        </div>
+        <div class="scan-rec" id="scanRec">
+          <!-- filled by JS based on state -->
+        </div>
+        <div class="tablet-actions" id="tabletActions">
+          <!-- filled by JS based on state -->
+        </div>
+      </div>
+    </div>
+
+    <div class="recv-side">
+      <div class="card">
+        <div class="card-head"><h3>Drum queue</h3><span class="count" id="queueCount">7 / 24</span></div>
+        <div class="card-body queue-list" id="queueList">
+          <!-- filled by JS -->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Session metrics</h3></div>
+        <div class="card-body" style="padding: 14px 18px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <div class="kpi-label">Placed</div>
+              <div class="kpi-value" id="sessionPlaced" style="font-size: 22px;">6</div>
+            </div>
+            <div>
+              <div class="kpi-label">Avg time</div>
+              <div class="kpi-value" style="font-size: 22px;">41<span class="kpi-unit">sec</span></div>
+            </div>
+            <div>
+              <div class="kpi-label">Plan match</div>
+              <div class="kpi-value" style="font-size: 22px;">100<span class="kpi-unit">%</span></div>
+            </div>
+            <div>
+              <div class="kpi-label">Pick dist. saved</div>
+              <div class="kpi-value" style="font-size: 22px;">214<span class="kpi-unit">m</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WAREHOUSE ============ -->
+<section class="view" id="view-warehouse">
+  <div class="section-header">
+    <div>
+      <h1>Warehouse map</h1>
+      <div class="sub">Slot occupancy across 2 sites · blocks grouped by product family</div>
+    </div>
+    <div class="meta">
+      <div>Snapshot</div>
+      <div class="mono">SAP WMS CSV · 12:04</div>
+    </div>
+  </div>
+
+  <div class="warehouse-layout">
+    <div class="warehouse-card">
+      <div class="wh-switch" id="whSwitch" style="margin-bottom: 16px; width: fit-content;">
+        <button class="active" data-wh="WH-1" onclick="selectWarehouse('WH-1')"><i class="ti ti-building-warehouse"></i> Warehouse 1 · Oost <span class="cap">100,000</span></button>
+        <button data-wh="WH-2" onclick="selectWarehouse('WH-2')"><i class="ti ti-building-warehouse"></i> Warehouse 2 · West <span class="cap">50,000</span></button>
+      </div>
+      <div class="warehouse-toolbar">
+        <div class="filter-chips" id="filterChips">
+          <button class="chip active" data-filter="all"><i class="ti ti-grid-dots"></i> All</button>
+          <button class="chip" data-filter="reserved"><i class="ti ti-calendar-event"></i> Reserved tomorrow</button>
+          <button class="chip" data-filter="reslot"><i class="ti ti-arrows-shuffle"></i> Re-slot</button>
+          <button class="chip" data-filter="empty"><i class="ti ti-circle"></i> Empty</button>
+          <button class="chip" data-filter="new"><i class="ti ti-sparkles"></i> Just placed</button>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-sq" style="background: var(--doehler-green)"></div> Occupied</div>
+          <div class="legend-item"><div class="legend-sq" style="background: var(--blue-tint); border: 1px dashed var(--blue)"></div> Reserved</div>
+          <div class="legend-item"><div class="legend-sq" style="background: var(--amber)"></div> Re-slot</div>
+          <div class="legend-item"><div class="legend-sq" style="background: var(--surface-3); border: 1px solid var(--border-2)"></div> Empty</div>
+        </div>
+      </div>
+
+      <div class="warehouse-map" id="warehouseMap">
+        <!-- filled by JS -->
+      </div>
+
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-2);">
+        <div>Hover any slot for details · Click to inspect · map shows a representative sample</div>
+        <div class="mono" id="whStats"></div>
+      </div>
+    </div>
+
+    <div id="slotDetailContainer">
+      <div class="slot-detail">
+        <div class="empty-state">
+          <i class="ti ti-pointer"></i>
+          <div>Click a slot on the map to see its contents and history.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSIGHTS ============ -->
+<section class="view" id="view-insights">
+  <div class="section-header">
+    <div>
+      <h1>AI insights</h1>
+      <div class="sub">Ask anything about inventory, capacity or tomorrow's plan.</div>
+    </div>
+    <div class="meta">
+      <div>Knowledge base</div>
+      <div class="mono">SAP WMS (CSV) · 2 sites · 150k positions</div>
+    </div>
+  </div>
+
+  <div class="insights-layout">
+    <div class="chat-card">
+      <div class="chat-head">
+        <h3>Ask the warehouse</h3>
+        <span class="ai-badge"><i class="ti ti-sparkles" style="font-size: 10px;"></i> Crux LLM agent</span>
+      </div>
+      <div class="chat-feed" id="chatFeed">
+        <div class="chat-msg ai">
+          <div class="bubble">
+            <div class="ans">Good afternoon, Jan. I'm across both Oosterhout warehouses, tomorrow's manifest and the latest optimisation run. What would you like to know?</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="suggestions">
+          <button class="suggestion" onclick="sendChat('Where is lot 244-ORG-16?')">Where is lot 244-ORG-16?</button>
+          <button class="suggestion" onclick="sendChat('What is in tomorrow&#39;s plan?')">What's in tomorrow's plan?</button>
+          <button class="suggestion" onclick="sendChat('Best block for incoming orange concentrate?')">Best block for orange concentrate</button>
+          <button class="suggestion" onclick="sendChat('Where can I free up space in WH-1?')">Free up space in WH-1?</button>
+          <button class="suggestion" onclick="sendChat('How full is Warehouse 2?')">How full is Warehouse 2?</button>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Type a question, or pick from suggestions above" onkeypress="if(event.key==='Enter') sendChat(this.value)" />
+          <button class="send-btn" onclick="sendChat(document.getElementById('chatInput').value)"><i class="ti ti-arrow-up"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="predictions-card">
+      <div class="card-head" style="border-bottom: 1px solid var(--border);">
+        <h3>Optimisation opportunities</h3>
+        <span class="count">4 active</span>
+      </div>
+      <div class="prediction">
+        <div class="pred-head">
+          <div class="pred-title">Consolidate WH-1 · block C</div>
+          <div class="pred-badge low">Optimisation</div>
+        </div>
+        <div class="pred-desc">64 partial bays in the flavour block can be consolidated into 22 full bays — freeing 240 drum positions with no pick disruption.</div>
+        <div class="pred-data">Quiet window 22:00–23:04 · 86 moves</div>
+        <div class="pred-action" onclick="handleAlert('optimise-wh1')">Review consolidation job →</div>
+      </div>
+      <div class="prediction">
+        <div class="pred-head">
+          <div class="pred-title">Tomorrow's plan vs capacity</div>
+          <div class="pred-badge med">Action</div>
+        </div>
+        <div class="pred-desc">Friday manifest needs 312 positions. 271 are free now; the WH-1 consolidation covers the remaining 41 before 06:00.</div>
+        <div class="pred-data">312 drums · 9 trucks · score 94</div>
+        <div class="pred-action" onclick="switchView('planning')">Open next-day planning →</div>
+      </div>
+      <div class="prediction">
+        <div class="pred-head">
+          <div class="pred-title">Rebalance to Warehouse 2</div>
+          <div class="pred-badge low">Optimisation</div>
+        </div>
+        <div class="pred-desc">WH-1 sits at 78% while WH-2 is at 64%. Shifting 120 slow-moving drums to WH-2 long-term blocks evens the load.</div>
+        <div class="pred-data">Net pick impact: negligible · 1 shuttle run</div>
+        <div class="pred-action" onclick="handleAlert('rebalance')">Apply rebalance proposal →</div>
+      </div>
+      <div class="prediction">
+        <div class="pred-head">
+          <div class="pred-title">Misplacement: 244-CON-87</div>
+          <div class="pred-badge med">Review</div>
+        </div>
+        <div class="pred-desc">Concentrate drum logged in block D (extracts). The manifest assigned block A — re-slotting restores family grouping.</div>
+        <div class="pred-data">Detected on putaway log import</div>
+        <div class="pred-action" onclick="handleAlert('misplacement')">Locate &amp; re-slot →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>Smart Putaway · <span class="mono">Doehler Holland BV · Oosterhout · WH-1 + WH-2</span></div>
+  <div style="margin-top: 4px; font-size: 11px; color: var(--text-3);">prototype v0.5 · build 2026.05.28 · CSV data exchange (no live API)</div>
+</footer>
+
+<div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this) closeModal()">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Title</h3>
+      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<div class="vendor-credit"><span class="mini-mark"></span> built by Crux Digits · cruxdigits.nl</div>
+
+<div class="toast" id="toast">
+  <i class="ti ti-check"></i>
+  <span id="toastMsg">Placement confirmed</span>
+</div>
+
+<script>
+// ============== DATA ==============
+const drumQueue = [
+  { idx: 1, lot: '244-ORG-16', name: 'Orange concentrate — Valencia', family: 'Fruit concentrate', volume: 200, drumType: 'Steel 200 L', allocation: 'A1042', slot: 'A-12-03', confidence: 96, dist: 22,
+    reasons: [
+      'Pre-allocated in the 12:00 plan · published 06:00',
+      'Block A — groups with 14 orange-concentrate drums',
+      'Ground level · 22 m from dock (fast pick)',
+      'Consolidates partial bay A-12 (frees a future bay)'
+    ]},
+  { idx: 2, lot: '244-ORG-17', name: 'Orange concentrate — Valencia', family: 'Fruit concentrate', volume: 200, drumType: 'Steel 200 L', allocation: 'A1042', slot: 'A-12-04', confidence: 95, dist: 22 },
+  { idx: 3, lot: '244-APP-30', name: 'Apple concentrate — clarified', family: 'Fruit concentrate', volume: 200, drumType: 'Steel 200 L', allocation: 'A1042', slot: 'A-14-01', confidence: 94, dist: 26 },
+  { idx: 4, lot: 'CLR-BEE-22', name: 'Beetroot red — natural colour', family: 'Natural colour', volume: 200, drumType: 'Steel 200 L', allocation: 'B2104', slot: 'B-07-01', confidence: 94, dist: 31 },
+  { idx: 5, lot: 'FLV-CIT-08', name: 'Citrus flavour system', family: 'Flavour system', volume: 200, drumType: 'Steel 200 L', allocation: 'C3380', slot: 'C-04-02', confidence: 93, dist: 38 },
+  { idx: 6, lot: 'EXT-GRN-11', name: 'Green tea extract', family: 'Plant extract', volume: 200, drumType: 'Steel 200 L', allocation: 'A1042', slot: 'D-09-01', confidence: 92, dist: 44 },
+  { idx: 7, lot: '244-ORG-18', name: 'Orange concentrate — Valencia', family: 'Fruit concentrate', volume: 200, drumType: 'Steel 200 L', allocation: 'A1042', slot: 'A-12-05', confidence: 95, dist: 22,
+    reasons: [
+      'Pre-allocated in the 12:00 plan · published 06:00',
+      'Block A — completes bay A-12 with its family',
+      'Ground level · 22 m from dock (fast pick)',
+      'Pure pick clustering with sibling lots'
+    ]},
+  { idx: 8, lot: '244-LEM-19', name: 'Lemon NFC base', family: 'Fruit concentrate', volume: 200, drumType: 'Steel 200 L', allocation: 'D4417', slot: 'A-11-04', confidence: 95, dist: 24 },
+];
+
+let currentDrumIdx = 0; // 0-indexed, start at drum 1 of 24 ready to scan
+
+const defaultReasons = (d) => [
+  'Pre-allocated in the 12:00 plan · published 06:00',
+  `Block ${d.slot[0]} — groups with same-family drums`,
+  `Ground level · ${d.dist || 22} m from dock (fast pick)`,
+  `Consolidates partial bay ${d.slot.slice(0,4)}`
+];
+
+// ============== VIEW SWITCH ==============
+function switchView(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name === 'warehouse') renderWarehouse();
+  if (name === 'receiving') renderReceiving();
+  if (name === 'planning') renderPlanning();
+}
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
+
+// ============== LIVE CLOCK ==============
+function tickClock() {
+  const t = document.getElementById('liveTime');
+  const r = document.getElementById('recvClock');
+  const d = new Date();
+  d.setHours(14, 22, d.getSeconds());
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  const ss = String(d.getSeconds()).padStart(2,'0');
+  if (t) t.textContent = `${hh}:${mm}:${ss} CET`;
+  if (r) r.textContent = `${hh}:${mm}`;
+}
+setInterval(tickClock, 1000); tickClock();
+
+// ============== RECEIVING — STATE MACHINE ==============
+// States: idle → scanning → computing → recommended → placing → (idle next drum)
+let receivingState = 'idle';
+
+function renderReceiving() {
+  const drum = drumQueue[currentDrumIdx];
+  const scanRec = document.getElementById('scanRec');
+  const actions = document.getElementById('tabletActions');
+
+  if (!drum) {
+    scanRec.innerHTML = `
+      <div class="complete-state">
+        <i class="ti ti-circle-check-filled"></i>
+        <div class="t">Truck DHL-4421 fully unloaded</div>
+        <div class="sub">24 of 24 drums placed · 100% plan match · allocations queued for SAP export</div>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn primary" onclick="switchView('warehouse')">View on map <i class="ti ti-arrow-right"></i></button>
+          <button class="btn ghost" onclick="switchView('dashboard')">Return to dashboard</button>
+        </div>
+      </div>`;
+    if (actions) actions.innerHTML = '';
+    document.getElementById('drumNum').textContent = '—';
+    document.getElementById('queueCount').textContent = '24 / 24';
+    document.getElementById('sessionPlaced').textContent = '24';
+    renderProgressBar(25);
+    renderQueueList();
+    return;
+  }
+
+  document.getElementById('drumNum').textContent = drum.idx;
+  document.getElementById('queueCount').textContent = `${drum.idx} / 24`;
+  document.getElementById('sessionPlaced').textContent = drum.idx - 1;
+  renderProgressBar(drum.idx);
+
+  if (receivingState === 'idle') {
+    scanRec.innerHTML = renderScannerPane('idle') + renderAIPane('idle');
+    actions.innerHTML = `
+      <button class="btn ghost" onclick="skipDrum()"><i class="ti ti-player-skip-forward"></i> Skip drum</button>
+      <button class="btn ghost" onclick="manualEntry()"><i class="ti ti-keyboard"></i> Manual entry</button>
+      <div class="spacer"></div>
+      <span style="font-size: 12px; color: var(--text-3); align-self: center;">Press <kbd style="font-family: var(--font-mono); background: var(--surface-2); padding: 2px 6px; border-radius: 3px; border: 1px solid var(--border);">S</kbd> to scan</span>`;
+  }
+  else if (receivingState === 'scanning') {
+    scanRec.innerHTML = renderScannerPane('scanning') + renderAIPane('idle');
+    actions.innerHTML = `<button class="btn ghost" disabled style="opacity: 0.5;"><i class="ti ti-loader-2 spin"></i> Scanning…</button>`;
+  }
+  else if (receivingState === 'computing') {
+    scanRec.innerHTML = renderScannerPane('done', drum) + renderAIPane('computing');
+    actions.innerHTML = `<button class="btn ghost" disabled style="opacity: 0.5;"><i class="ti ti-loader-2 spin"></i> Computing optimal slot…</button>`;
+  }
+  else if (receivingState === 'recommended') {
+    scanRec.innerHTML = renderScannerPane('done', drum) + renderAIPane('recommended', drum);
+    actions.innerHTML = `
+      <button class="btn primary" onclick="acceptPlacement()" style="flex: 1; justify-content: center;">
+        Accept & navigate <i class="ti ti-arrow-right"></i>
+      </button>
+      <button class="btn ghost" onclick="showAlternatives()">Alternatives</button>
+      <button class="btn ghost" onclick="rejectPlacement()"><i class="ti ti-x"></i> Reject</button>`;
+  }
+  else if (receivingState === 'placing') {
+    scanRec.innerHTML = `
+      <div class="placing-state">
+        <i class="ti ti-route"></i>
+        <div class="t">Navigating to ${drum.slot}</div>
+        <div class="sub">Block ${drum.slot[0]} · ${drum.dist || 22} m · ~40 sec</div>
+      </div>`;
+    actions.innerHTML = `<button class="btn ghost" disabled style="opacity: 0.5;"><i class="ti ti-loader-2 spin"></i> Logging putaway · queued for SAP export…</button>`;
+  }
+
+  renderQueueList();
+}
+
+function renderScannerPane(stage, drum) {
+  if (stage === 'idle') {
+    return `
+      <div class="scan-pane">
+        <div class="pane-label">Scanner</div>
+        <div class="scanner-viewfinder">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <i class="ti ti-barrel viewfinder-icon"></i>
+          <div class="viewfinder-text">Position drum label in frame</div>
+        </div>
+        <button class="btn primary scan-trigger" onclick="triggerScan()">
+          <i class="ti ti-scan"></i> Scan drum
+          <kbd>S</kbd>
+        </button>
+      </div>`;
+  }
+  if (stage === 'scanning') {
+    return `
+      <div class="scan-pane">
+        <div class="pane-label">Scanning…</div>
+        <div class="scanner-viewfinder scanning">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <i class="ti ti-barrel viewfinder-icon"></i>
+          <div class="scan-line"></div>
+          <div class="viewfinder-text">OCR + barcode · vision model running</div>
+        </div>
+        <button class="btn primary scan-trigger" disabled>
+          <i class="ti ti-loader-2 spin"></i> Scanning…
+        </button>
+      </div>`;
+  }
+  return `
+    <div class="scan-pane">
+      <div class="pane-label" style="color: var(--doehler-green-dark);"><i class="ti ti-circle-check" style="vertical-align: -2px;"></i> Drum identified</div>
+      <div class="drum-visual">
+        <div class="drum-icon"><i class="ti ti-barrel"></i></div>
+        <div>
+          <div class="drum-name">${drum.name}</div>
+          <div class="drum-id">Lot ${drum.lot} · ${drum.volume} L</div>
+        </div>
+      </div>
+      <div class="drum-details">
+        <div><div class="detail-label">Product family</div><div class="detail-value">${drum.family}</div></div>
+        <div><div class="detail-label">Drum</div><div class="detail-value mono">${drum.drumType}</div></div>
+        <div><div class="detail-label">Block</div><div class="detail-value mono">${drum.slot[0]} · ${blockOf(drum.slot[0]).name}</div></div>
+        <div><div class="detail-label">Customer</div><div class="detail-value mono">Cust. ${drum.allocation}</div></div>
+      </div>
+    </div>`;
+}
+
+function renderAIPane(stage, drum) {
+  if (stage === 'idle') {
+    return `
+      <div class="rec-pane" style="background: var(--surface-2);">
+        <div class="pane-label">AI engine</div>
+        <div class="ai-waiting">
+          <i class="ti ti-cpu"></i>
+          <div class="t">Ready</div>
+          <div class="sub">Waiting for drum scan · avg response 0.4 s</div>
+        </div>
+      </div>`;
+  }
+  if (stage === 'computing') {
+    return `
+      <div class="rec-pane" style="background: var(--surface-2);">
+        <div class="pane-label">AI engine</div>
+        <div class="ai-computing">
+          <i class="ti ti-loader-2 spin big"></i>
+          <div class="t">Confirming pre-allocated slot…</div>
+          <div class="steps">
+            <div class="step" data-cstep="1">Matching drum to the 12:00 plan</div>
+            <div class="step" data-cstep="2">Confirming the bay is still free</div>
+            <div class="step" data-cstep="3">Checking family grouping &amp; consolidation</div>
+            <div class="step" data-cstep="4">Optimising pick distance</div>
+          </div>
+        </div>
+      </div>`;
+  }
+  const reasons = drum.reasons || defaultReasons(drum);
+  const blockName = blockOf(drum.slot[0]).name;
+  return `
+    <div class="rec-pane">
+      <div class="label-line">
+        <div class="pane-label">Pre-allocated slot</div>
+        <div class="confidence">${drum.confidence}% match</div>
+      </div>
+      <div class="slot-code">${drum.slot}</div>
+      <div class="slot-meta">
+        ${blockName} <span class="dot"></span> ${drum.dist || 22} m from dock <span class="dot"></span> ~40 sec
+      </div>
+      <div style="font-size: 11px; font-weight: 500; color: var(--doehler-green-darker); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;">Why this slot</div>
+      <ul class="why-list">
+        ${reasons.map(r => `<li><i class="ti ti-check"></i> ${r}</li>`).join('')}
+      </ul>
+    </div>`;
+}
+
+function renderProgressBar(idx) {
+  const pb = document.getElementById('progressBar');
+  pb.innerHTML = '';
+  for (let i = 1; i <= 24; i++) {
+    const s = document.createElement('span');
+    if (i < idx) s.className = 'done';
+    else if (i === idx) s.className = 'current';
+    pb.appendChild(s);
+  }
+}
+
+function renderQueueList() {
+  const ql = document.getElementById('queueList');
+  ql.innerHTML = '';
+  for (let i = 0; i < drumQueue.length; i++) {
+    const d = drumQueue[i];
+    const cls = i < currentDrumIdx ? 'done' : i === currentDrumIdx ? 'current' : '';
+    const item = document.createElement('div');
+    item.className = `queue-item ${cls}`;
+    item.innerHTML = `
+      <div class="idx">${String(d.idx).padStart(2,'0')}</div>
+      <div>
+        <div>${d.name.split(' — ')[0]}</div>
+        <div class="lot">${d.lot}</div>
+      </div>
+      <div class="slot">${i < currentDrumIdx ? '✓ ' + d.slot : ''}</div>
+    `;
+    item.addEventListener('click', () => jumpToDrum(i));
+    ql.appendChild(item);
+  }
+}
+
+function jumpToDrum(i) {
+  if (i < 0 || i >= drumQueue.length) return;
+  // don't interrupt an in-flight scan / placement animation
+  if (['scanning', 'computing', 'placing'].includes(receivingState)) return;
+  if (i === currentDrumIdx && receivingState === 'idle') return;
+  currentDrumIdx = i;
+  receivingState = 'idle';
+  renderReceiving();
+  const d = drumQueue[i];
+  showToast(`Jumped to drum ${d.idx} · ${d.lot}`);
+}
+
+function triggerScan() {
+  if (receivingState !== 'idle') return;
+  const drum = drumQueue[currentDrumIdx];
+  if (!drum) return;
+  receivingState = 'scanning';
+  renderReceiving();
+  setTimeout(() => {
+    receivingState = 'computing';
+    renderReceiving();
+    setTimeout(() => markStep(1, 'active'), 80);
+    setTimeout(() => { markStep(1, 'done'); markStep(2, 'active'); }, 350);
+    setTimeout(() => { markStep(2, 'done'); markStep(3, 'active'); }, 700);
+    setTimeout(() => { markStep(3, 'done'); markStep(4, 'active'); }, 1000);
+    setTimeout(() => { markStep(4, 'done'); }, 1300);
+    setTimeout(() => {
+      receivingState = 'recommended';
+      renderReceiving();
+    }, 1500);
+  }, 1500);
+}
+
+function markStep(n, cls) {
+  const s = document.querySelector(`[data-cstep="${n}"]`);
+  if (s) { s.classList.remove('active', 'done'); s.classList.add(cls); }
+}
+
+function acceptPlacement() {
+  if (receivingState !== 'recommended') return;
+  const drum = drumQueue[currentDrumIdx];
+  receivingState = 'placing';
+  renderReceiving();
+  warehouseState[drum.slot] = { status: 'new', drum: drum };
+  showToast(`Drum ${drum.lot} → slot ${drum.slot}`, 'success');
+  setTimeout(() => {
+    currentDrumIdx++;
+    receivingState = 'idle';
+    renderReceiving();
+  }, 1200);
+}
+
+function rejectPlacement() {
+  if (receivingState !== 'recommended') return;
+  openModal({
+    title: 'Reject recommendation',
+    body: `
+      <p style="font-size: 13px; color: var(--text-2); margin-bottom: 16px;">Pick a reason. This signal is sent to the model retraining queue.</p>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button class="sso-btn" onclick="confirmReject('Wrong drum scanned')">Wrong drum scanned</button>
+        <button class="sso-btn" onclick="confirmReject('Slot is physically blocked')">Slot is physically blocked</button>
+        <button class="sso-btn" onclick="confirmReject('Drum damaged / leaking')">Drum damaged / leaking</button>
+        <button class="sso-btn" onclick="confirmReject('Operator preference')">Operator preference</button>
+      </div>`,
+    foot: `<button class="btn ghost" onclick="closeModal()">Cancel</button>`
+  });
+}
+function confirmReject(reason) {
+  closeModal();
+  showToast(`Rejection logged: ${reason}`);
+  receivingState = 'idle';
+  renderReceiving();
+}
+
+function showAlternatives() {
+  if (receivingState !== 'recommended') return;
+  const drum = drumQueue[currentDrumIdx];
+  openModal({
+    title: 'Alternative slots',
+    body: `
+      <p style="font-size: 13px; color: var(--text-2); margin-bottom: 14px;">3 slots ranked by composite score (space, pick distance &amp; family grouping) for ${drum.name}.</p>
+      <div class="slot-pick" onclick="pickAlternative('${drum.slot}', ${drum.confidence})">
+        <div class="code">${drum.slot}</div>
+        <div class="info">Pre-allocated · best composite score</div>
+        <div class="conf">${drum.confidence}%</div>
+      </div>
+      <div class="slot-pick" onclick="pickAlternative('A-12-06', 88)">
+        <div class="code">A-12-06</div>
+        <div class="info">Same bay · keeps the family together</div>
+        <div class="conf">88%</div>
+      </div>
+      <div class="slot-pick" onclick="pickAlternative('A-15-01', 81)">
+        <div class="code">A-15-01</div>
+        <div class="info">Reclaimed bay · +6 m pick distance</div>
+        <div class="conf">81%</div>
+      </div>`,
+    foot: `<button class="btn ghost" onclick="closeModal()">Cancel</button>`
+  });
+}
+function pickAlternative(slot, conf) {
+  drumQueue[currentDrumIdx].slot = slot;
+  drumQueue[currentDrumIdx].confidence = conf;
+  closeModal();
+  renderReceiving();
+  showToast(`Slot switched to ${slot}`);
+}
+
+function skipDrum() {
+  showToast(`Drum ${currentDrumIdx + 1} skipped · returned to queue end`);
+  currentDrumIdx++;
+  renderReceiving();
+}
+
+function manualEntry() {
+  openModal({
+    title: 'Manual drum entry',
+    body: `
+      <p style="font-size: 13px; color: var(--text-2); margin-bottom: 16px;">Use only when the label is damaged or the scanner cannot read it.</p>
+      <div class="field" style="margin-bottom: 12px;">
+        <label>Lot number</label>
+        <input type="text" placeholder="e.g. 244-ORG-09" />
+      </div>
+      <div class="field" style="margin-bottom: 12px;">
+        <label>Ingredient code (SAP)</label>
+        <input type="text" placeholder="e.g. MTR-220-ORG" />
+      </div>
+      <div class="field">
+        <label>Operator note</label>
+        <input type="text" placeholder="Optional" />
+      </div>`,
+    foot: `
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="closeModal(); showToast('Manual entry logged · supervisor approval requested');">Submit</button>`
+  });
+}
+
+// ============== TRUCK PREP ==============
+function prepTruck(id, bay, eta) {
+  showToast(`${bay} reserved for ${id} · arrival ${eta}`, 'success');
+}
+
+// ============== ALERT ACTIONS ==============
+function handleAlert(kind) {
+  if (kind === 'optimise-wh1') {
+    openModal({
+      title: 'Storage optimisation · Warehouse 1',
+      body: `
+        <div style="font-size: 13px; line-height: 1.6;">
+          <p style="margin-bottom: 14px;">The engine re-scored the existing stock first. <strong>86 re-slot moves</strong> consolidate fragmented bays in blocks C &amp; E — freeing exactly the space tomorrow's intake needs.</p>
+          <div style="background: var(--surface-2); padding: 12px 14px; border-radius: 4px; margin-bottom: 14px;">
+            <div class="detail-row"><span class="k">Re-slot moves</span><span class="v">86</span></div>
+            <div class="detail-row"><span class="k">Positions reclaimed</span><span class="v" style="color: var(--doehler-green-dark);">312</span></div>
+            <div class="detail-row"><span class="k">Avg pick distance</span><span class="v" style="color: var(--doehler-green-dark);">−7%</span></div>
+            <div class="detail-row"><span class="k">Picks disrupted</span><span class="v">0 · overnight</span></div>
+            <div class="detail-row"><span class="k">Scheduled window</span><span class="v mono">22:00 – 23:04</span></div>
+          </div>
+          <p style="color: var(--text-2); font-size: 12px;">Runs before the 06:00 plan publish, so reclaimed bays are available for the Friday manifest.</p>
+        </div>`,
+      foot: `
+        <button class="btn ghost" onclick="closeModal()">Defer</button>
+        <button class="btn primary" onclick="closeModal(); showToast('Consolidation job scheduled · 22:00 · R. de Vries assigned', 'success');">Approve run</button>`
+    });
+  }
+  else if (kind === 'rebalance') {
+    openModal({
+      title: 'Rebalance load · WH-1 → WH-2',
+      body: `
+        <div style="font-size: 13px; line-height: 1.6;">
+          <p style="margin-bottom: 14px;">Warehouse 1 is filling faster than Warehouse 2. Moving <strong>120 slow-moving drums</strong> to the WH-2 long-term blocks evens the load and keeps fast-pick bays free in WH-1.</p>
+          <div style="background: var(--surface-2); padding: 12px 14px; border-radius: 4px; margin-bottom: 14px;">
+            <div class="detail-row"><span class="k">WH-1 fill</span><span class="v" style="color: var(--amber);">78% → 74%</span></div>
+            <div class="detail-row"><span class="k">WH-2 fill</span><span class="v">64% → 67%</span></div>
+            <div class="detail-row"><span class="k">Drums moved</span><span class="v">120 · slow-movers</span></div>
+            <div class="detail-row"><span class="k">Pick impact</span><span class="v">negligible</span></div>
+          </div>
+          <p style="color: var(--text-2); font-size: 12px;">One inter-site shuttle run. Candidates are low-frequency lots with no near-term order.</p>
+        </div>`,
+      foot: `
+        <button class="btn ghost" onclick="closeModal()">Dismiss</button>
+        <button class="btn primary" onclick="closeModal(); showToast('Rebalance queued · 120 drums → WH-2 long-term', 'success');">Apply rebalance</button>`
+    });
+  }
+  else if (kind === 'misplacement') {
+    switchView('warehouse');
+    setTimeout(() => {
+      const id = 'D-05-01';
+      warehouseState[id] = { status: 'reslot', drum: { name: 'Orange concentrate — Valencia', lot: '244-CON-87', volume: 200, family: 'Fruit concentrate', drumType: 'Steel 200 L', placed: '2 days ago', allocation: 'Cust. A1042', fit: 52, note: 'Misplaced — belongs in block A (fruit concentrate)' } };
+      currentWarehouse = 'WH-1';
+      document.querySelectorAll('#whSwitch button').forEach(b => b.classList.toggle('active', b.dataset.wh === 'WH-1'));
+      selectSlot(id);
+      showToast('Misplaced lot 244-CON-87 located in block D');
+    }, 400);
+  }
+}
+
+// ============== MODAL ==============
+function openModal({ title, body, foot }) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = body;
+  document.getElementById('modalFoot').innerHTML = foot || '';
+  document.getElementById('modalBackdrop').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('show');
+}
+
+function openHelpModal() {
+  openModal({
+    title: 'Need help signing in?',
+    body: `
+      <div style="font-size: 13px; line-height: 1.6; color: var(--text-2);">
+        <p style="margin-bottom: 12px;">For sign-in issues, contact your Doehler IT helpdesk:</p>
+        <div style="background: var(--surface-2); padding: 14px; border-radius: 4px; margin-bottom: 14px; font-family: var(--font-mono); font-size: 12px;">
+          <div style="margin-bottom: 4px;">+31 13 568 0900</div>
+          <div>it.holland@doehler.com</div>
+        </div>
+        <p style="margin-bottom: 8px;"><strong>Common fixes:</strong></p>
+        <ul style="padding-left: 18px; color: var(--text-2);">
+          <li>Make sure you're on the Doehler corporate network or VPN.</li>
+          <li>SSO uses your Azure AD credentials.</li>
+          <li>Password resets go through the Doehler self-service portal.</li>
+        </ul>
+      </div>`,
+    foot: `<button class="btn primary" onclick="closeModal()">Got it</button>`
+  });
+}
+
+// ============== KEYBOARD SHORTCUTS ==============
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (document.body.classList.contains('logged-out')) return;
+  if (e.key === 's' || e.key === 'S') {
+    if (receivingState === 'idle' && document.getElementById('view-receiving').classList.contains('active')) {
+      e.preventDefault();
+      triggerScan();
+    }
+  }
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('globalSearch').focus();
+  }
+});
+
+// ============== WAREHOUSE MAP ==============
+const warehouses = [
+  { id: 'WH-1', name: 'Warehouse 1 · Oost', cap: 100000, fill: 78, blocks: [
+    { start: 'A', name: 'Fruit concentrates' },
+    { start: 'B', name: 'Natural colours' },
+    { start: 'C', name: 'Flavour systems' },
+    { start: 'D', name: 'Plant extracts' },
+    { start: 'E', name: 'Malt & cereal bases' },
+    { start: 'F', name: 'Bulk IBC' },
+  ]},
+  { id: 'WH-2', name: 'Warehouse 2 · West', cap: 50000, fill: 64, blocks: [
+    { start: 'G', name: 'Slow-movers · long-term' },
+    { start: 'H', name: 'Customer-allocated holds' },
+    { start: 'J', name: 'Overflow buffer' },
+  ]},
+];
+let currentWarehouse = 'WH-1';
+
+function blockOf(letter) {
+  for (const w of warehouses) { const b = w.blocks.find(x => x.start === letter); if (b) return b; }
+  return { start: letter, name: 'Block ' + letter };
+}
+
+// sample products per block letter (drives slot contents)
+const blockProducts = {
+  A: ['Orange concentrate','Apple concentrate','Mango purée','Lemon NFC base','Pineapple concentrate'],
+  B: ['Beetroot red','Spirulina blue','Carotene orange','Anthocyanin purple','Paprika extract'],
+  C: ['Citrus flavour','Vanilla flavour','Berry flavour','Cola flavour'],
+  D: ['Green tea extract','Hibiscus extract','Acerola extract','Guarana extract'],
+  E: ['Barley malt','Oat base','Rice dextrin','Wheat base'],
+  F: ['Glucose syrup','Apple base IBC','Invert sugar'],
+  G: ['Caramel colour','Aged malt','Stock concentrate'],
+  H: ['Customer blend','Private-label base'],
+  J: ['Buffer concentrate','Mixed pallet'],
+};
+
+// generate warehouse state (flat map; block letters are unique per site)
+const warehouseState = {};
+let seed = 1;
+function rand() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+warehouses.forEach(w => {
+  w.blocks.forEach(b => {
+    for (let col = 1; col <= 16; col++) {
+      const id = `${b.start}-${String(col).padStart(2,'0')}-01`;
+      const r = rand();
+      let status = 'empty';
+      if (r < 0.66) status = 'occupied';
+      else if (r < 0.74) status = 'reslot';
+      else if (r < 0.82) status = 'reserved';
+      if (status === 'empty' || status === 'reserved') {
+        warehouseState[id] = { status };
+        continue;
+      }
+      const prods = blockProducts[b.start] || ['Concentrate'];
+      const name = prods[Math.floor(rand() * prods.length)];
+      const fit = status === 'reslot' ? 45 + Math.floor(rand()*22) : 80 + Math.floor(rand()*20);
+      warehouseState[id] = {
+        status,
+        drum: {
+          name,
+          family: b.name,
+          lot: `${244 + Math.floor(rand()*60)}-${name.substring(0,3).toUpperCase()}-${String(Math.floor(rand()*99)).padStart(2,'0')}`,
+          volume: 200,
+          drumType: 'Steel 200 L',
+          placed: `${Math.floor(rand()*120)} days ago`,
+          allocation: `Cust. ${Math.floor(rand()*900)+100}`,
+          fit
+        }
+      };
+    }
+  });
+});
+
+let activeFilter = 'all';
+let selectedSlot = null;
+
+function selectWarehouse(wh) {
+  currentWarehouse = wh;
+  selectedSlot = null;
+  document.querySelectorAll('#whSwitch button').forEach(b => b.classList.toggle('active', b.dataset.wh === wh));
+  renderWarehouse();
+  document.getElementById('slotDetailContainer').innerHTML =
+    `<div class="slot-detail"><div class="empty-state"><i class="ti ti-pointer"></i><div>Click a slot on the map to see its contents and placement fit.</div></div></div>`;
+}
+
+function updateWhStats() {
+  const w = warehouses.find(x => x.id === currentWarehouse);
+  let reslot = 0, reserved = 0;
+  w.blocks.forEach(b => {
+    for (let col = 1; col <= 16; col++) {
+      const st = warehouseState[`${b.start}-${String(col).padStart(2,'0')}-01`];
+      if (!st) continue;
+      if (st.status === 'reslot') reslot++;
+      else if (st.status === 'reserved') reserved++;
+    }
+  });
+  const occReal = Math.round(w.cap * w.fill / 100);
+  const freeReal = w.cap - occReal;
+  const el = document.getElementById('whStats');
+  if (el) el.textContent = `${occReal.toLocaleString()} occupied · ${freeReal.toLocaleString()} free · ${reslot} re-slot · ${reserved} reserved (sample)`;
+}
+
+function renderWarehouse() {
+  const map = document.getElementById('warehouseMap');
+  if (!map) return;
+  const w = warehouses.find(x => x.id === currentWarehouse);
+  map.innerHTML = '';
+  w.blocks.forEach((z) => {
+    const row = document.createElement('div');
+    row.className = 'zone-row';
+    row.innerHTML = `<div class="zone-label"><div class="name">${z.name}</div><div class="meta">Block ${z.start} · ${currentWarehouse}</div></div>`;
+    const grid = document.createElement('div');
+    grid.className = 'slot-grid';
+    for (let col = 1; col <= 16; col++) {
+      const id = `${z.start}-${String(col).padStart(2,'0')}-01`;
+      const st = warehouseState[id] || { status: 'empty' };
+      const div = document.createElement('div');
+      div.className = 'slot';
+      div.dataset.id = id;
+      let cls = '';
+      if (st.status === 'occupied') cls = 'occupied';
+      else if (st.status === 'reslot') cls = 'occupied reslot';
+      else if (st.status === 'reserved') cls = 'reserved';
+      else if (st.status === 'new') cls = 'occupied new';
+      if (cls) div.className = 'slot ' + cls;
+      if (selectedSlot === id) div.classList.add('selected');
+
+      let show = true;
+      if (activeFilter === 'reserved' && st.status !== 'reserved') show = false;
+      if (activeFilter === 'reslot' && st.status !== 'reslot') show = false;
+      if (activeFilter === 'empty' && st.status !== 'empty') show = false;
+      if (activeFilter === 'new' && st.status !== 'new') show = false;
+      if (!show) div.style.opacity = '0.15';
+
+      const label = st.status === 'reserved' ? 'Reserved · Fri 29 May' : (st.drum ? st.drum.name : 'Empty');
+      div.title = id + ' · ' + label;
+      div.addEventListener('click', () => selectSlot(id));
+      grid.appendChild(div);
+    }
+    row.appendChild(grid);
+    map.appendChild(row);
+  });
+  updateWhStats();
+}
+
+function selectSlot(id) {
+  selectedSlot = id;
+  renderWarehouse();
+  const st = warehouseState[id] || { status: 'empty' };
+  const panel = document.getElementById('slotDetailContainer');
+  const blk = blockOf(id[0]);
+  if (st.status === 'empty' || st.status === 'reserved') {
+    const reserved = st.status === 'reserved';
+    panel.innerHTML = `
+      <div class="slot-detail">
+        <div class="slot-detail-head">
+          <div class="slot-detail-code">${id}</div>
+          <div class="slot-detail-zone">${currentWarehouse} · ${blk.name}${reserved ? ' · reserved' : ''}</div>
+        </div>
+        <div class="slot-detail-body">
+          <div class="empty-state" style="padding: 18px 0;">
+            <i class="ti ti-${reserved ? 'calendar-event' : 'circle-dashed'}"></i>
+            <div>${reserved ? "Reserved for tomorrow's plan · Fri 29 May." : 'Empty — available for allocation.'}</div>
+            <button class="btn primary" style="margin-top: 14px;" onclick="switchView('planning')">${reserved ? 'Open the plan' : 'Allocate via planning'} <i class="ti ti-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+  const d = st.drum;
+  const fit = d.fit !== undefined ? d.fit : 88;
+  const fitClass = fit < 70 ? 'mid' : '';
+  const isReslot = st.status === 'reslot';
+  panel.innerHTML = `
+    <div class="slot-detail">
+      <div class="slot-detail-head">
+        <div class="slot-detail-code">${id}</div>
+        <div class="slot-detail-zone">${currentWarehouse} · ${blk.name}</div>
+      </div>
+      <div class="slot-detail-body">
+        <div class="slot-detail-section">
+          <div class="section-title">Current contents</div>
+          <div style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">${d.name}</div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-2);">Lot ${d.lot} · ${d.volume} L · ${d.drumType || 'Steel 200 L'}</div>
+        </div>
+        <div class="slot-detail-section">
+          <div class="section-title">Properties</div>
+          <div class="detail-row"><span class="k">Product family</span><span class="v">${d.family || blk.name}</span></div>
+          <div class="detail-row"><span class="k">Placed</span><span class="v">${d.placed || '—'}</span></div>
+          <div class="detail-row"><span class="k">Allocation</span><span class="v mono">${d.allocation || '—'}</span></div>
+        </div>
+        <div class="slot-detail-section">
+          <div class="section-title">Placement fit</div>
+          <div class="detail-row"><span class="k">Composite score</span><span class="v" style="color: ${fit < 70 ? 'var(--amber)' : 'var(--doehler-green-dark)'}">${fit} / 100</span></div>
+          <div class="fit-bar"><div class="fill ${fitClass}" style="width: ${fit}%"></div></div>
+        </div>
+        <div class="slot-detail-section">
+          <div class="section-title">AI insights</div>
+          <div style="font-size: 12px; color: var(--text-2); line-height: 1.55;">
+            ${isReslot
+              ? `<strong style="color: var(--amber);">Re-slot candidate:</strong> ${d.note || 'Low composite score — splits its product family across bays. Consolidating recovers a bay and shortens picks.'}`
+              : 'Well placed. Grouped with its product family and inside the fast-pick band. No action required.'}
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; padding-top: 8px;">
+          <button class="btn ghost" style="flex: 1;" onclick="showSlotHistory('${id}')"><i class="ti ti-history"></i> History</button>
+          <button class="btn ghost" style="flex: 1;" onclick="showMoveDialog('${id}')"><i class="ti ti-arrows-shuffle"></i> Re-slot</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+// filter chips
+document.getElementById('filterChips').addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#filterChips .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.filter;
+  renderWarehouse();
+});
+
+// ============== INSIGHTS / CHAT ==============
+const cannedResponses = {
+  '244-org-16': {
+    ans: 'Lot <span class="mono">244-ORG-16</span> (Orange concentrate — Valencia) is in <strong>Warehouse 1</strong>, slot <strong>A-12-03</strong> — block A, fruit concentrates. Pre-allocated in the 12:00 plan and put away at 06:42, grouped with 14 sibling lots, 22 m from the dock.',
+    data: [['Warehouse', 'WH-1 · Oost'], ['Slot', 'A-12-03'], ['Block', 'A · Fruit concentrates'], ['Drum', 'Steel 200 L'], ['Allocation', 'Cust. A1042']],
+    src: 'Warehouse snapshot · putaway log'
+  },
+  'plan': {
+    ans: 'Tomorrow (<strong>Fri 29 May</strong>) the manifest brings <strong>312 drums on 9 trucks</strong>. All are pre-allocated — 271 into free bays, 41 into space freed by the overnight WH-1 consolidation. Composite plan score is 94/100.',
+    data: [['Drums', '312'], ['Trucks', '9'], ['Pre-allocated', '312 / 312'], ['Optimisation score', '94 / 100'], ['First arrival', '06:30 · DHL-4421']],
+    src: 'Manifest · manifest_2026-05-29.csv',
+    action: 'Open next-day planning →',
+    act: "switchView('planning')"
+  },
+  'best block': {
+    ans: 'For incoming <strong>orange concentrate</strong>, the best home is <strong>block A in WH-1</strong>, bay A-12 — it already holds the orange-concentrate family and has partial bays to complete.',
+    data: [['Block', 'A · Fruit concentrates'], ['Best bay', 'A-12 (partial)'], ['Why', 'Family grouping + consolidation'], ['Pick distance', '22 m from dock'], ['Composite score', '96 / 100']],
+    src: 'Optimisation engine · 0.4 s'
+  },
+  'free space': {
+    ans: 'The fastest space to recover in <strong>WH-1</strong> is <strong>block C (flavour systems)</strong>: 64 partial bays consolidate into 22 full bays, freeing <strong>240 positions</strong>. Block E adds another 72. Total recoverable tonight: 312 positions.',
+    data: [['Block C', '64 partial → frees 240'], ['Block E', 'frees 72'], ['Moves', '86 · overnight'], ['Picks disrupted', '0'], ['Window', '22:00–23:04']],
+    src: 'Optimisation engine',
+    action: 'Review consolidation job →',
+    act: "handleAlert('optimise-wh1')"
+  },
+  'wh2': {
+    ans: 'Warehouse 2 (West) is at <strong>64%</strong> — 32,000 of 50,000 positions used, <strong>18,000 free</strong>. It mainly holds slow-movers and customer-allocated stock, so it is the natural overflow for the WH-1 rebalance.',
+    data: [['Capacity', '50,000'], ['Occupied', '32,000 · 64%'], ['Free', '18,000'], ['Profile', 'Slow-movers · long-term'], ['Headroom for tomorrow', 'ample']],
+    src: 'Warehouse snapshot · SAP WMS CSV'
+  },
+};
+
+function matchResponse(q) {
+  const ql = q.toLowerCase();
+  if (ql.includes('org-16') || ql.includes('244-org') || (ql.includes('where') && ql.includes('lot'))) return cannedResponses['244-org-16'];
+  if (ql.includes('tomorrow') || ql.includes('plan') || ql.includes('manifest')) return cannedResponses['plan'];
+  if (ql.includes('best block') || ql.includes('best slot') || ql.includes('orange') || ql.includes('concentrate')) return cannedResponses['best block'];
+  if (ql.includes('free') || ql.includes('space') || ql.includes('consolidat') || ql.includes('recover')) return cannedResponses['free space'];
+  if (ql.includes('warehouse 2') || ql.includes('wh-2') || ql.includes('wh2') || ql.includes('how full') || ql.includes('capacity') || ql.includes('fill')) return cannedResponses['wh2'];
+  return {
+    ans: `I don't have a specific answer for that in the demo dataset. In production I'd query the warehouse snapshot, the daily manifest and the putaway log to return a grounded answer with sources — all over CSV exchange, no live API.`,
+    src: 'Crux LLM agent'
+  };
+}
+
+function sendChat(q) {
+  if (!q || !q.trim()) return;
+  const feed = document.getElementById('chatFeed');
+  const input = document.getElementById('chatInput');
+  input.value = '';
+
+  // user msg
+  const u = document.createElement('div');
+  u.className = 'chat-msg user';
+  u.innerHTML = `<div class="bubble">${escapeHtml(q)}</div>`;
+  feed.appendChild(u);
+  feed.scrollTop = feed.scrollHeight;
+
+  // typing indicator
+  const typing = document.createElement('div');
+  typing.className = 'chat-msg ai';
+  typing.innerHTML = `<div class="bubble" style="font-style: italic; color: var(--text-3);">Thinking — querying the warehouse snapshot &amp; manifest…</div>`;
+  feed.appendChild(typing);
+  feed.scrollTop = feed.scrollHeight;
+
+  setTimeout(() => {
+    typing.remove();
+    const r = matchResponse(q);
+    let dataHtml = '';
+    if (r.data) {
+      dataHtml = `<div class="data-block">${r.data.map(([l,v]) => `<div class="row"><span class="l">${l}</span><span class="r">${v}</span></div>`).join('')}</div>`;
+    }
+    let actionHtml = r.action ? `<div class="alert-action" style="margin-top: 8px; cursor: pointer;"${r.act ? ` onclick="${r.act}"` : ''}>${r.action}</div>` : '';
+    const a = document.createElement('div');
+    a.className = 'chat-msg ai';
+    a.innerHTML = `<div class="bubble"><div class="ans">${r.ans}</div>${dataHtml}${actionHtml}<div class="source"><i class="ti ti-link"></i> ${r.src}</div></div>`;
+    feed.appendChild(a);
+    feed.scrollTop = feed.scrollHeight;
+  }, 900);
+}
+
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+// global search → routes to insights
+document.getElementById('globalSearch').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    const v = e.target.value;
+    e.target.value = '';
+    switchView('insights');
+    setTimeout(() => sendChat(v), 350);
+  }
+});
+
+// ============== TOAST ==============
+function showToast(msg, kind) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  if (kind === 'success') t.classList.add('success');
+  else t.classList.remove('success');
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ============== LOGIN FLOW ==============
+function performLogin(method) {
+  const screen = document.getElementById('loginScreen');
+  const loader = document.getElementById('loginLoading');
+  screen.classList.add('fading');
+  setTimeout(() => {
+    loader.classList.add('show');
+    runLoadingSequence();
+  }, 300);
+}
+
+function runLoadingSequence() {
+  const steps = document.querySelectorAll('.load-step');
+  const bar = document.getElementById('loadingBar');
+  const timings = [
+    { delay: 50,   meta: '143 ms' },
+    { delay: 700,  meta: '312 ms' },
+    { delay: 1500, meta: '1.2 s' },
+    { delay: 2300, meta: '186 ms' },
+    { delay: 2800, meta: '94 ms' },
+  ];
+  // start first step
+  steps[0].classList.add('active');
+  steps[0].querySelector('.ti').className = 'ti ti-loader-2';
+
+  timings.forEach((t, i) => {
+    setTimeout(() => {
+      // mark current as done
+      const cur = steps[i];
+      cur.classList.remove('active');
+      cur.classList.add('done');
+      cur.querySelector('.ti').className = 'ti ti-circle-check';
+      cur.querySelector('.meta').textContent = t.meta;
+      // progress
+      bar.style.width = `${((i + 1) / steps.length) * 100}%`;
+      // start next
+      const next = steps[i + 1];
+      if (next) {
+        next.classList.add('active');
+        next.querySelector('.ti').className = 'ti ti-loader-2';
+      }
+    }, t.delay);
+  });
+
+  // complete and reveal app
+  setTimeout(() => {
+    document.body.classList.remove('logged-out');
+    const loader = document.getElementById('loginLoading');
+    const screen = document.getElementById('loginScreen');
+    loader.classList.remove('show');
+    setTimeout(() => {
+      screen.style.display = 'none';
+      loader.style.display = 'none';
+      showToast("Welcome back, Jan. Tomorrow's manifest is in — 312 drums ready to plan.", 'success');
+    }, 350);
+  }, 3500);
+}
+
+function signOut() {
+  if (!confirm('Sign out and return to login? Your session will be saved.')) return;
+  const screen = document.getElementById('loginScreen');
+  const loader = document.getElementById('loginLoading');
+  // reset loading steps
+  document.querySelectorAll('.load-step').forEach(s => {
+    s.classList.remove('active', 'done');
+    s.querySelector('.ti').className = 'ti ti-circle';
+    s.querySelector('.meta').textContent = '';
+  });
+  document.getElementById('loadingBar').style.width = '0%';
+  document.body.classList.add('logged-out');
+  screen.style.display = '';
+  loader.style.display = '';
+  screen.classList.remove('fading');
+  window.scrollTo({ top: 0 });
+}
+
+function showSlotHistory(id) {
+  const st = warehouseState[id];
+  if (!st || !st.drum) return;
+  const d = st.drum;
+  openModal({
+    title: `Movement history · ${id}`,
+    body: `
+      <div style="font-size: 12px; color: var(--text-2); margin-bottom: 16px;">Last 6 events for this slot.</div>
+      <div class="timeline-event">
+        <div class="when">Today 14:21</div>
+        <div class="marker"></div>
+        <div class="what">
+          <div class="title">Drum placed</div>
+          <div class="desc">${d.name} · lot ${d.lot} · by R. de Vries · pre-allocated slot</div>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="when">Today 14:08</div>
+        <div class="marker"></div>
+        <div class="what">
+          <div class="title">Slot reserved</div>
+          <div class="desc">Reserved by the 12:00 plan for inbound truck DHL-4421</div>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="when">Yesterday 17:42</div>
+        <div class="marker"></div>
+        <div class="what">
+          <div class="title">Drum picked</div>
+          <div class="desc">Lot 198-ORG-04 → customer A1042 dispatch</div>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="when">26 May 09:14</div>
+        <div class="marker"></div>
+        <div class="what">
+          <div class="title">Drum placed</div>
+          <div class="desc">Lot 198-ORG-04 from truck DHL-4339 · by R. de Vries</div>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="when">22 May 13:30</div>
+        <div class="marker"></div>
+        <div class="what">
+          <div class="title">Inspection passed</div>
+          <div class="desc">QA spot check · seal &amp; label OK</div>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="when">19 May 11:05</div>
+        <div class="marker"></div>
+        <div class="what">
+          <div class="title">Drum picked</div>
+          <div class="desc">Lot 188-ORG-29 → customer B2104 direct ship</div>
+        </div>
+      </div>`,
+    foot: `<button class="btn ghost" onclick="closeModal()">Close</button>`
+  });
+}
+
+function showMoveDialog(id) {
+  const st = warehouseState[id];
+  if (!st || !st.drum) return;
+  const d = st.drum;
+  // suggest destinations in the family block of the current warehouse
+  const w = warehouses.find(x => x.id === currentWarehouse);
+  const b0 = w.blocks[0].start;
+  const candidates = [`${b0}-02-01`, `${b0}-03-01`, `${b0}-04-01`];
+  const infos = [
+    `Block ${b0} · rejoins its product family`,
+    `Block ${b0} · completes a partial bay (consolidation)`,
+    `Block ${b0} · fast-pick band, +4 m distance`
+  ];
+  openModal({
+    title: `Re-slot drum from ${id}`,
+    body: `
+      <p style="font-size: 13px; color: var(--text-2); margin-bottom: 14px;">Re-slotting <strong>${d.name}</strong> (lot ${d.lot}). The engine scored 3 destinations on the composite of space, pick distance and family grouping.</p>
+      ${candidates.map((c, i) => `
+        <div class="slot-pick" onclick="performMove('${id}', '${c}')">
+          <div class="code">${c}</div>
+          <div class="info">${infos[i]}</div>
+          <div class="conf">${[95, 90, 82][i]}%</div>
+        </div>
+      `).join('')}`,
+    foot: `<button class="btn ghost" onclick="closeModal()">Cancel</button>`
+  });
+}
+
+function performMove(from, to) {
+  if (!warehouseState[from] || !warehouseState[from].drum) return;
+  const drum = warehouseState[from].drum;
+  warehouseState[to] = { status: 'new', drum: drum };
+  warehouseState[from] = { status: 'empty' };
+  closeModal();
+  selectedSlot = to;
+  renderWarehouse();
+  selectSlot(to);
+  showToast(`Drum moved · ${from} → ${to}`, 'success');
+}
+
+// ============== NEXT-DAY PLANNING ==============
+let planningStep = 'import'; // import → optimise → allocate → published
+
+const manifestTrucks = [
+  { truck: 'DHL-4421',    eta: '06:30', family: 'Fruit concentrate',  drums: 46, cust: 'A1042' },
+  { truck: 'MAERSK-8821', eta: '07:15', family: 'Natural colour',     drums: 38, cust: 'B2104' },
+  { truck: 'DSV-3340',    eta: '08:00', family: 'Flavour system',     drums: 32, cust: 'C3380' },
+  { truck: 'CTW-2207',    eta: '09:10', family: 'Plant extract',      drums: 29, cust: 'A1042' },
+  { truck: 'GLS-7741',    eta: '10:00', family: 'Fruit concentrate',  drums: 41, cust: 'D4417' },
+  { truck: 'DHL-4438',    eta: '11:20', family: 'Malt & cereal base', drums: 27, cust: 'B2104' },
+  { truck: 'MAERSK-8830', eta: '12:40', family: 'Natural colour',     drums: 33, cust: 'E5520' },
+  { truck: 'DSV-3361',    eta: '14:00', family: 'Sweetener base',     drums: 25, cust: 'C3380' },
+  { truck: 'GLS-7760',    eta: '15:30', family: 'Fruit concentrate',  drums: 41, cust: 'A1042' },
+];
+const manifestTotal = manifestTrucks.reduce((s, t) => s + t.drums, 0); // 312
+
+const allocationRows = [
+  { lot: '244-ORG-16', product: 'Orange concentrate', n: 46, wh: 'WH-1', slot: 'A-12-03', score: 96, why: 'Groups with 14 orange lots · consolidates bay A-12' },
+  { lot: 'CLR-BEE-22', product: 'Beetroot red',       n: 38, wh: 'WH-1', slot: 'B-07-01', score: 95, why: 'Colour block · ground level · 20 m from dock' },
+  { lot: 'FLV-CIT-08', product: 'Citrus flavour',     n: 32, wh: 'WH-1', slot: 'C-04-02', score: 93, why: 'Flavour block · fills partial bay C-04' },
+  { lot: 'EXT-GRN-11', product: 'Green tea extract',  n: 29, wh: 'WH-1', slot: 'D-09-01', score: 92, why: 'Extract block · adjacent to customer A1042' },
+  { lot: '244-APP-30', product: 'Apple concentrate',  n: 41, wh: 'WH-1', slot: 'A-14-01', score: 94, why: 'Concentrate block · reclaimed bay (post-consolidation)' },
+  { lot: 'MLT-BAR-05', product: 'Barley malt',        n: 27, wh: 'WH-1', slot: 'E-03-02', score: 90, why: 'Cereal block · low-frequency band' },
+  { lot: 'CLR-SPI-14', product: 'Spirulina blue',     n: 33, wh: 'WH-1', slot: 'B-09-01', score: 93, why: 'Colour block · groups with the blue range' },
+  { lot: 'SWT-GLU-09', product: 'Glucose syrup',      n: 25, wh: 'WH-2', slot: 'G-02-01', score: 88, why: 'Slow-mover → WH-2 long-term · balances load' },
+  { lot: '244-LEM-19', product: 'Lemon NFC base',     n: 41, wh: 'WH-1', slot: 'A-11-04', score: 95, why: 'Concentrate block · pick clustering with citrus' },
+];
+
+function renderPlanning() {
+  renderPlanSteps();
+  renderPlanStage();
+  renderPlanAside();
+}
+
+function renderPlanSteps() {
+  const bar = document.getElementById('planStepsBar');
+  if (!bar) return;
+  const order = ['import', 'optimise', 'allocate'];
+  const cur = planningStep === 'published' ? 3 : order.indexOf(planningStep);
+  const labels = ['Import & review manifest', 'Optimise existing storage', 'Pre-allocate & publish'];
+  bar.innerHTML = labels.map((t, idx) => {
+    const cls = idx < cur ? 'done' : idx === cur ? 'active' : '';
+    const num = idx < cur ? '<i class="ti ti-check"></i>' : (idx + 1);
+    return `<div class="pstep ${cls}"><span class="num">${num}</span> ${t}</div>`;
+  }).join('');
+}
+
+function renderPlanStage() {
+  const stage = document.getElementById('planStage');
+  if (!stage) return;
+
+  if (planningStep === 'import') {
+    stage.innerHTML = `
+      <div class="stage-head">
+        <div>
+          <div class="st">Import tomorrow's manifest</div>
+          <div class="ss">SAP WMS exports the next-day truck &amp; item list as CSV at 12:00 CET. Drop it here — no live API connection is opened.</div>
+        </div>
+        <div class="csv-pill"><i class="ti ti-shield-lock"></i> Cyber-safe · file only</div>
+      </div>
+      <div class="dropzone" onclick="importManifest()">
+        <div class="dz-icon"><i class="ti ti-upload"></i></div>
+        <div class="dz-t">Drop <span class="mono">manifest_2026-05-29.csv</span> here</div>
+        <div class="dz-s">or click to browse. Expected columns: truck, arrival, lot, product, drums, customer. The engine validates every row on import.</div>
+        <button class="btn primary" onclick="event.stopPropagation(); importManifest()"><i class="ti ti-file-spreadsheet"></i> Import sample manifest</button>
+      </div>`;
+    return;
+  }
+
+  const manifestTbl = `
+    <div class="tbl-scroll">
+      <table class="mtable">
+        <thead><tr><th>Truck</th><th>Arrival</th><th>Product family</th><th class="num-cell">Drums</th><th>Customer</th></tr></thead>
+        <tbody>
+          ${manifestTrucks.map(t => `<tr><td class="mono">${t.truck}</td><td class="mono">${t.eta}</td><td>${t.family}</td><td class="num-cell">${t.drums}</td><td class="mono">${t.cust}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="tbl-foot"><span><i class="ti ti-circle-check" style="color: var(--doehler-green); vertical-align: -2px;"></i> 9 trucks validated · 0 errors</span><span class="mono">${manifestTotal} drums</span></div>`;
+
+  if (planningStep === 'optimise') {
+    stage.innerHTML = `
+      <div class="stage-head">
+        <div>
+          <div class="st">Optimise existing storage first</div>
+          <div class="ss">Before placing anything new, the engine re-scores current stock and consolidates fragmented bays — freeing space exactly where tomorrow needs it.</div>
+        </div>
+        <div class="csv-pill ok"><i class="ti ti-file-check"></i> manifest_2026-05-29.csv</div>
+      </div>
+      <div class="optimise-grid">
+        <div class="opt-card"><div class="oc-l">Re-slot moves</div><div class="oc-v">86</div><div class="oc-d">overnight · 0 picks hit</div></div>
+        <div class="opt-card"><div class="oc-l">Positions reclaimed</div><div class="oc-v">312</div><div class="oc-d">= tomorrow's intake</div></div>
+        <div class="opt-card"><div class="oc-l">Avg pick distance</div><div class="oc-v">−7<span class="u">%</span></div><div class="oc-d">tighter grouping</div></div>
+        <div class="opt-card"><div class="oc-l">Job window</div><div class="oc-v" style="font-size:17px;">22:00–23:04</div><div class="oc-d">before 06:00 publish</div></div>
+      </div>
+      <div class="ba-card">
+        <div class="beforeafter">
+          <div class="ba"><div class="lbl"><span>Fragmented bays — now</span><b>142</b></div><div class="bar amber"><i style="width:78%"></i></div></div>
+          <div class="arrow"><i class="ti ti-arrow-right"></i></div>
+          <div class="ba"><div class="lbl"><span>After consolidation</span><b>56</b></div><div class="bar"><i style="width:31%"></i></div></div>
+        </div>
+        <div class="composite-key">
+          <div class="ck"><span class="sw" style="background:var(--doehler-green)"></span> Space &amp; consolidation</div>
+          <div class="ck"><span class="sw" style="background:var(--blue)"></span> Pick / access efficiency</div>
+          <div class="ck"><span class="sw" style="background:var(--amber)"></span> Product / customer grouping</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-2);margin-bottom:10px;">Manifest preview · ${manifestTotal} drums on 9 trucks</div>
+      ${manifestTbl}
+      <div style="margin-top:18px;text-align:right;">
+        <button class="btn primary" onclick="preAllocate()">Pre-allocate ${manifestTotal} drums <i class="ti ti-arrow-right"></i></button>
+      </div>`;
+    return;
+  }
+
+  if (planningStep === 'allocate') {
+    stage.innerHTML = `
+      <div class="stage-head">
+        <div>
+          <div class="st">Pre-allocated · ${manifestTotal} of ${manifestTotal} drums</div>
+          <div class="ss">Every incoming drum has a slot before the truck arrives — scored on the composite of space, pick distance and product grouping. This is what each forklift tablet receives at 06:00.</div>
+        </div>
+        <div class="csv-pill ok"><i class="ti ti-checks"></i> Score 94 / 100</div>
+      </div>
+      <div class="tbl-scroll">
+        <table class="mtable">
+          <thead><tr><th>Lot</th><th>Product</th><th class="num-cell">Drums</th><th>Slot</th><th class="num-cell">Score</th><th>Why this slot</th></tr></thead>
+          <tbody>
+            ${allocationRows.map(r => `<tr>
+              <td class="mono">${r.lot}</td>
+              <td>${r.product}</td>
+              <td class="num-cell">${r.n}</td>
+              <td class="slot-cell">${r.slot}<span class="wh-tag">${r.wh}</span></td>
+              <td class="num-cell score" style="color:${r.score < 90 ? 'var(--amber)' : 'var(--doehler-green-dark)'}">${r.score}</td>
+              <td class="why">${r.why}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="tbl-foot"><span><i class="ti ti-info-circle" style="vertical-align:-2px;"></i> Showing 9 representative lots · full plan covers ${manifestTotal} drums</span><span class="mono">298 → WH-1 · 14 → WH-2</span></div>
+      <div style="margin-top:18px;text-align:right;">
+        <button class="btn primary" onclick="publishPlan()"><i class="ti ti-rocket"></i> Approve &amp; publish to tablets</button>
+      </div>`;
+    return;
+  }
+
+  if (planningStep === 'published') {
+    stage.innerHTML = `
+      <div class="plan-done">
+        <div class="pd-icon"><i class="ti ti-circle-check-filled"></i></div>
+        <div class="pd-t">Plan published to 6 forklift tablets</div>
+        <div class="pd-s">${manifestTotal} drums pre-allocated for Friday 29 May, set to land from 06:00. Allocations are exported as a CSV for SAP WMS — no live API, fully within the cybersecurity policy.</div>
+        <div class="pd-actions">
+          <button class="btn primary" onclick="exportAllocations()"><i class="ti ti-file-export"></i> Export allocations (CSV)</button>
+          <button class="btn ghost" onclick="switchView('receiving')">Open the forklift view <i class="ti ti-arrow-right"></i></button>
+          <button class="btn ghost" onclick="resetPlanning()"><i class="ti ti-refresh"></i> Start over</button>
+        </div>
+      </div>`;
+    return;
+  }
+}
+
+function renderPlanAside() {
+  const aside = document.getElementById('planAside');
+  if (!aside) return;
+  const imported  = planningStep !== 'import';
+  const optimised = ['optimise', 'allocate', 'published'].includes(planningStep);
+  const allocated = ['allocate', 'published'].includes(planningStep);
+  const published = planningStep === 'published';
+  const row = (ok, icon, k, v) => `
+    <div class="pa-row ${ok ? 'ok' : 'pending'}">
+      <span class="k"><i class="ti ${ok ? 'ti-circle-check' : icon}"></i> ${k}</span>
+      <span class="v">${v}</span>
+    </div>`;
+  aside.innerHTML = `
+    <div class="pa-head"><h3>Plan summary</h3><span class="count">Fri 29 May</span></div>
+    <div class="pa-body">
+      ${row(imported,  'ti-file-spreadsheet', 'Manifest', imported ? `${manifestTotal} drums · 9 trucks` : 'awaiting import')}
+      ${row(optimised, 'ti-stack-2',          'Storage optimisation', optimised ? '+312 positions' : 'pending')}
+      ${row(allocated, 'ti-rocket',           'Pre-allocation', allocated ? `${manifestTotal} / ${manifestTotal}` : 'pending')}
+      ${row(allocated, 'ti-gauge',            'Optimisation score', allocated ? '94 / 100' : 'pending')}
+      ${row(published, 'ti-device-tablet',    'Published to tablets', published ? '6 tablets · 06:00' : 'pending')}
+    </div>
+    <div class="pa-foot">
+      <button class="btn primary" ${allocated && !published ? '' : 'disabled'} onclick="publishPlan()"><i class="ti ti-rocket"></i> Approve &amp; publish</button>
+      <button class="btn ghost" ${published ? '' : 'disabled'} onclick="exportAllocations()"><i class="ti ti-file-export"></i> Export allocations (CSV)</button>
+    </div>`;
+}
+
+function importManifest() {
+  if (planningStep !== 'import') return;
+  showToast('Reading manifest_2026-05-29.csv …');
+  setTimeout(() => {
+    planningStep = 'optimise';
+    renderPlanning();
+    showToast('Manifest imported · 312 drums, 9 trucks · 0 errors', 'success');
+  }, 750);
+}
+
+function preAllocate() {
+  if (planningStep !== 'optimise') return;
+  showToast('Optimising storage &amp; pre-allocating 312 drums …');
+  setTimeout(() => {
+    planningStep = 'allocate';
+    renderPlanning();
+    showToast('312 drums pre-allocated · composite score 94', 'success');
+  }, 850);
+}
+
+function publishPlan() {
+  if (planningStep !== 'allocate') return;
+  planningStep = 'published';
+  // reflect a few of tomorrow's reservations on the WH-1 map
+  ['A-12-03', 'A-14-01', 'B-07-01', 'C-04-02', 'D-09-01'].forEach(id => { warehouseState[id] = { status: 'reserved' }; });
+  renderPlanning();
+  showToast('Plan published to 6 forklift tablets · live 06:00', 'success');
+}
+
+function exportAllocations() {
+  showToast('putaway_2026-05-29.csv exported → SAP WMS inbox', 'success');
+}
+
+function resetPlanning() {
+  planningStep = 'import';
+  renderPlanning();
+}
+
+// initial renders
+renderReceiving();
+renderWarehouse();
+renderPlanning();
+
+</script>
+</body>
+</html>
